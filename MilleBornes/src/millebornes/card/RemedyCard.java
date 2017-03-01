@@ -1,11 +1,13 @@
 package millebornes.card;
-
-public class RemedyCard extends Card {
+/**
+ * Card which counters a HazardCard of type Counter
+ *
+ */
+public class RemedyCard extends SavingCard {
 	private static final long serialVersionUID = 2708224905239756537L;
 
-	public RemedyCard(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
+	public RemedyCard(String name,Card counter) {
+		super(name,counter);
 	}
 
 }
