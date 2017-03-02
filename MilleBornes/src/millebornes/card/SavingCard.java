@@ -1,9 +1,14 @@
 package millebornes.card;
 
+import millebornes.util.CardName;
+/**
+ * The base card for safety and remedy cards
+ *
+ */
 public abstract class SavingCard extends Card {
 	private static final long serialVersionUID = 2248184231528568309L;
 	protected HazardCard counter;
-	public SavingCard(String name,HazardCard counter) {
+	public SavingCard(CardName name,HazardCard counter) {
 		super(name);
 		this.counter=counter;
 	}
