@@ -6,7 +6,7 @@ package millebornes.card;
 public class RemedyCard extends SavingCard {
 	private static final long serialVersionUID = 2708224905239756537L;
 
-	public RemedyCard(String name,Card counter) {
+	public RemedyCard(String name,HazardCard counter) {
 		super(name,counter);
 	}
 

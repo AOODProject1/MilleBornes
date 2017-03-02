@@ -6,7 +6,7 @@ package millebornes.card;
 public class SafetyCard extends SavingCard {
 	private static final long serialVersionUID = 2390207801162042934L;
 
-	public SafetyCard(String name,Card counter) {
+	public SafetyCard(String name,HazardCard counter) {
 		super(name,counter);
 		// TODO Auto-generated constructor stub
 	}
