@@ -9,8 +9,8 @@ import millebornes.util.CardName;
 public class SafetyCard extends SavingCard {
 	private static final long serialVersionUID = 2390207801162042934L;
 
-	public SafetyCard(CardName name,HazardCard counter) {
-		super(name,counter);
+	public SafetyCard(CardName name) {
+		super(name);
 		// TODO Auto-generated constructor stub
 	}
 

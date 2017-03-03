@@ -11,25 +11,21 @@ public class MadRushAI implements AI {
 			SpeedCard compSpeed, Card playerBattle, SafetyCard[] playerSafeties, int playerDistance,
 			SpeedCard playerSpeed) {
 		Card bestCard;
-		Card typeToLookFor;
-		if (compBattle == compBattle) { //change to compbattle isn't a roll card
+		Card typeToLookFor = null;
+		if (!compBattle.equals(new RemedyCard(CardName.ROLL))) { //change to compbattle isn't a roll card
 			if (compBattle instanceof HazardCard) {
 				typeToLookFor = new Countercard((HazardCard)compBattle).getRemedy();
 			}
 		} else if (compBattle instanceof RemedyCard) {
-			if ((RemedyCard)compBattle.equals(new RemedyCard(CardName.ROLL))) {
-				
+			if (((RemedyCard)compBattle).equals(new RemedyCard(CardName.ROLL))) {
+				typeToLookFor = new MovementCard(CardName.MILE_200);
 			}
 		} else {
-			typeToLookFor = new MovementCard(CardName.MILE_200);
+			typeToLookFor = new RemedyCard(CardName.ROLL);
 		}
 		for (int i=0;i<hand.length;i++) {
-			if (typeToLookFor.isInstance(hand[i])) {
-				if (typeToLookFor.equals(RemedyCard.class)) {
-					
-				} else if (typeToLookFor.equals(MovementCard.class)) {
-					
-				}
+			if (hand[i].getClass().getSimpleName().equals(typeToLookFor.getClass().getSimpleName())) {
+					//find correct card based to typetolookfor
 			}
 		}
 		return 0;

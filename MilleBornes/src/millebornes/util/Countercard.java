@@ -17,10 +17,10 @@ public class Countercard {
 	}
 	public RemedyCard getRemedy() {
 		switch(hazard.getName()) {
-		case ACCIDENT:return new RemedyCard(CardName.REPAIRS,hazard);
-		case OUT_OF_GAS:return new RemedyCard(CardName.GAS,hazard);
-		case FLAT_TIRE:return new RemedyCard(CardName.SPARE_TIRE,hazard);
-		case STOP:return new RemedyCard(CardName.ROLL,hazard);
+		case ACCIDENT:return new RemedyCard(CardName.REPAIRS);
+		case OUT_OF_GAS:return new RemedyCard(CardName.GAS);
+		case FLAT_TIRE:return new RemedyCard(CardName.SPARE_TIRE);
+		case STOP:return new RemedyCard(CardName.ROLL);
 		default:return null;
 		}
 	}
