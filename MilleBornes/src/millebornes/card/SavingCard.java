@@ -11,7 +11,11 @@ public abstract class SavingCard extends Card {
 	public SavingCard(CardName name) {
 		super(name);
 		switch (name) {
-		
+		case GAS:
+		case REPAIRS:
+		case SPARE_TIRE:
+		case ROLL:
+		default:
 		}
 	}
 	public Card getCounter() {
