@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,17 +12,21 @@ import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextPane;
+import javax.swing.JPanel;
 
 import millebornes.card.Card;
 
 public class Screen1 {
 	static JFrame f;
+	static JPanel playerCards;
+	static JPanel compCards;
+	static JPanel playerRunCards;
+	static JPanel compRunCards;
+	static JPanel playerSafetyCards;
+	static JPanel compSafetyCards;
 	private static  Card[]player  = new Card[6];
 	private static  Card[]comp  = new Card[6];
 	private static  Card[]playerSafeties  = new Card[4];
@@ -39,8 +42,9 @@ public class Screen1 {
 	public static void main (String[] args){
 		show("Default");
 	}
-	public static void show(String player){
+	public static void show(String p){
 		f = new JFrame("Mille Bornes");
+		
 		f.setExtendedState(f.MAXIMIZED_BOTH);
 		JMenuBar bar = new JMenuBar();
 		JMenuItem help = new JMenuItem("Help");
@@ -48,6 +52,7 @@ public class Screen1 {
 		JMenuItem save = new JMenuItem("Save As");
 		JMenuItem quit = new JMenuItem("Quit");
 		JMenuItem newGame = new JMenuItem("New Game");
+		
 		bar.add(newGame);
 		bar.add(save);
 		bar.add(load);
@@ -67,7 +72,19 @@ public class Screen1 {
 					saveLoc.getParentFile().mkdirs();
 					try (ObjectOutputStream p = new ObjectOutputStream(new FileOutputStream(saveLoc))){
 						saveLoc.createNewFile();
+						p.writeObject(deck);
+						p.writeObject(discard);
 						p.writeObject(player);
+						p.writeObject(comp);
+						p.writeObject(playerSafeties);
+						p.writeObject(compSafeties);
+						p.writeObject(hazardPlayer);
+						p.writeObject(limitPlayer);
+						p.writeObject(milagePlayer);
+						p.writeObject(hazardComp);
+						p.writeObject(limitComp);
+						p.writeObject(milageComp);
+						
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
@@ -84,8 +101,18 @@ public class Screen1 {
 					saveLoc.getParentFile().mkdirs();
 					try (ObjectInputStream p = new ObjectInputStream(new FileInputStream(saveLoc))){
 						saveLoc.createNewFile();
-						toDos = ((ArrayList<ActionItem>)(p.readObject()));
-						updateList();
+						deck = ((ArrayList<Card>)(p.readObject()));
+						discard = ((ArrayList<Card>)(p.readObject()));
+						player = ((Card[])(p.readObject()));
+						comp = ((Card[])(p.readObject()));
+						playerSafeties = ((Card[])(p.readObject()));
+						compSafeties = ((Card[])(p.readObject()));
+						hazardPlayer = ((Card)(p.readObject()));
+						limitPlayer = ((Card)(p.readObject()));
+						milagePlayer = ((Card)(p.readObject()));
+						hazardComp = ((Card)(p.readObject()));
+						limitComp = ((Card)(p.readObject()));
+						milageComp = ((Card)(p.readObject()));
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					} catch (ClassNotFoundException e1) {
@@ -95,6 +122,8 @@ public class Screen1 {
 				//set to-dos as a file chosen by user
 			}
 		});
+		keyComponent component = new keyComponent();
+		f.add(component);
 		f.setJMenuBar(bar);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
