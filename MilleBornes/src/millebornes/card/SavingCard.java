@@ -8,9 +8,11 @@ import millebornes.util.CardName;
 public abstract class SavingCard extends Card {
 	private static final long serialVersionUID = 2248184231528568309L;
 	protected HazardCard counter;
-	public SavingCard(CardName name,HazardCard counter) {
+	public SavingCard(CardName name) {
 		super(name);
-		this.counter=counter;
+		switch (name) {
+		
+		}
 	}
 	public Card getCounter() {
 		return counter;
