@@ -1,5 +1,7 @@
 package millebornes.MainScreen;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -44,7 +46,6 @@ public class Screen1 {
 	}
 	public static void show(String p){
 		f = new JFrame("Mille Bornes");
-		
 		f.setExtendedState(f.MAXIMIZED_BOTH);
 		JMenuBar bar = new JMenuBar();
 		JMenuItem help = new JMenuItem("Help");
@@ -52,12 +53,14 @@ public class Screen1 {
 		JMenuItem save = new JMenuItem("Save As");
 		JMenuItem quit = new JMenuItem("Quit");
 		JMenuItem newGame = new JMenuItem("New Game");
-		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		bar.add(newGame);
 		bar.add(save);
 		bar.add(load);
 		bar.add(help);
 		bar.add(quit);
+		playerCards.setSize((int)(screenSize.getWidth() * (2/5)), (int)(screenSize.getHeight() * (1/10)));
+		f.add(playerCards);
 		quit.addActionListener(new QuitListener());
 		save.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
