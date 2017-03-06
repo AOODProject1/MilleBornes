@@ -1,6 +1,10 @@
 package millebornes.MainScreen;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +16,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -20,7 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import millebornes.card.Card;
-
+//https://docs.oracle.com/javase/tutorial/uiswing/layout/gridbag.html
 public class Screen1 {
 	static JFrame f;
 	static JPanel playerCards;
@@ -53,14 +58,17 @@ public class Screen1 {
 		JMenuItem save = new JMenuItem("Save As");
 		JMenuItem quit = new JMenuItem("Quit");
 		JMenuItem newGame = new JMenuItem("New Game");
+		JPanel pane = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		c.fill = c.HORIZONTAL;
+		
 		bar.add(newGame);
 		bar.add(save);
 		bar.add(load);
 		bar.add(help);
 		bar.add(quit);
-		playerCards.setSize((int)(screenSize.getWidth() * (2/5)), (int)(screenSize.getHeight() * (1/10)));
-		f.add(playerCards);
+		
 		quit.addActionListener(new QuitListener());
 		save.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
