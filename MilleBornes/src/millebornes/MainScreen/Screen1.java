@@ -16,6 +16,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -30,10 +31,9 @@ public class Screen1 {
 	static JFrame f;
 	static JPanel playerCards;
 	static JPanel compCards;
+	static JPanel deckCards;
 	static JPanel playerRunCards;
 	static JPanel compRunCards;
-	static JPanel playerSafetyCards;
-	static JPanel compSafetyCards;
 	private static  Card[]player  = new Card[6];
 	private static  Card[]comp  = new Card[6];
 	private static  Card[]playerSafeties  = new Card[4];
@@ -61,7 +61,13 @@ public class Screen1 {
 		JPanel paneNonSafeties = new JPanel();
 		JPanel paneSafeties = new JPanel();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		paneSafeties.setBounds(screenSize.getWidth() - , y, width, height);
+		paneSafeties.setBounds((int)screenSize.getWidth() - 100, 0, 100, 1136);
+		paneNonSafeties.setLayout(new BoxLayout(paneNonSafeties, BoxLayout.Y_AXIS));
+		paneNonSafeties.add(compCards);
+		paneNonSafeties.add(compRunCards);
+		paneNonSafeties.add(deckCards);
+		paneNonSafeties.add(playerRunCards);
+		paneNonSafeties.add(playerCards);
 		bar.add(newGame);
 		bar.add(save);
 		bar.add(load);
@@ -133,6 +139,8 @@ public class Screen1 {
 			}
 		});
 		keyComponent component = new keyComponent();
+		f.add(paneSafeties);
+		f.add(paneNonSafeties);
 		f.add(component);
 		f.setJMenuBar(bar);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
