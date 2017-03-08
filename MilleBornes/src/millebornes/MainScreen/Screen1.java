@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import millebornes.card.Card;
-//https://docs.oracle.com/javase/tutorial/uiswing/layout/gridbag.html
+//http://www.codex99.com/design/images/mille/cards_us_1960_lg.jpg
 public class Screen1 {
 	static JFrame f;
 	static JPanel playerCards;
@@ -58,11 +58,10 @@ public class Screen1 {
 		JMenuItem save = new JMenuItem("Save As");
 		JMenuItem quit = new JMenuItem("Quit");
 		JMenuItem newGame = new JMenuItem("New Game");
-		JPanel pane = new JPanel(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		JPanel paneNonSafeties = new JPanel();
+		JPanel paneSafeties = new JPanel();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		c.fill = c.HORIZONTAL;
-		
+		paneSafeties.setBounds(screenSize.getWidth() - , y, width, height);
 		bar.add(newGame);
 		bar.add(save);
 		bar.add(load);
