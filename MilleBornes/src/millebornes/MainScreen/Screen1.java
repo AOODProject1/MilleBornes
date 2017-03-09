@@ -63,6 +63,7 @@ public class Screen1 {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		paneSafeties.setBounds((int)screenSize.getWidth() - 100, 0, 100, 1136);
 		paneNonSafeties.setLayout(new BoxLayout(paneNonSafeties, BoxLayout.Y_AXIS));
+		//compCards.setSize(width, height);
 		paneNonSafeties.add(compCards);
 		paneNonSafeties.add(compRunCards);
 		paneNonSafeties.add(deckCards);
@@ -75,6 +76,41 @@ public class Screen1 {
 		bar.add(quit);
 		
 		quit.addActionListener(new QuitListener());
+		newGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				compCards.removeAll();
+				compRunCards.removeAll();
+				deckCards.removeAll();
+				playerCards.removeAll();
+				playerRunCards.removeAll();
+				playerCards.removeAll();
+				paneSafeties.removeAll();
+				player = null;
+				comp = null;
+				playerSafeties = null;
+				compSafeties = null;
+				hazardPlayer = null;
+				limitPlayer = null;
+				milagePlayer = null;
+				hazardComp = null;
+				limitComp = null;
+				milageComp = null;
+				deck.clear();
+				discard.clear();
+				int twentfive = 0;
+				for (int i = 0; i < 105; i++){
+					int n = (int) ((Math.random() * 4) + 1);
+					if (n == 1) {
+						int n2 = (int) ((Math.random() * 5) + 1);
+						if (n2 == 1){
+							twentfive++;
+							deck.add(((Math.random() * 106) + 1), );
+						}
+					}
+					
+				}
+			}
+		});
 		save.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser getSaveFile = new JFileChooser();
