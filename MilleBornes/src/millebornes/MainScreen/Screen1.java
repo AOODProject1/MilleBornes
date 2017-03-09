@@ -26,6 +26,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import millebornes.card.Card;
+import millebornes.card.HazardCard;
+import millebornes.card.MovementCard;
+import millebornes.util.CardName;
 //http://www.codex99.com/design/images/mille/cards_us_1960_lg.jpg
 public class Screen1 {
 	static JFrame f;
@@ -99,7 +102,17 @@ public class Screen1 {
 				discard.clear();
 				for (int i = 0; i < 105; i++){
 					if (i <= 10){
-						deck.add(e)
+						deck.add(new MovementCard(CardName.MILE_25));
+					} else if(i <= 20){
+						deck.add(new MovementCard(CardName.MILE_50));
+					} else if(i <= 30){
+						deck.add(new MovementCard(CardName.MILE_75));
+					} else if(i <= 42){
+						deck.add(new MovementCard(CardName.MILE_100));
+					} else if(i <= 46){
+						deck.add(new MovementCard(CardName.MILE_200));
+					}  else if(i <= 49){
+						deck.add(new HazardCard(CardName.OUT_OF_GAS));
 					}
 				}
 			}
