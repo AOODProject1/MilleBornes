@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import millebornes.util.CardName;
 
-public abstract class Card implements Serializable{
+public abstract class Card implements Serializable {
 	private static final long serialVersionUID = -3158433674904661857L;
 	protected CardName name;
 	public Card(CardName name) {
@@ -12,5 +12,8 @@ public abstract class Card implements Serializable{
 	}
 	public CardName getName() {
 		return name;
+	}
+	public boolean equals(Card c) {
+		return c.name==name;
 	}
 }
