@@ -97,17 +97,10 @@ public class Screen1 {
 				milageComp = null;
 				deck.clear();
 				discard.clear();
-				int twentfive = 0;
 				for (int i = 0; i < 105; i++){
-					int n = (int) ((Math.random() * 4) + 1);
-					if (n == 1) {
-						int n2 = (int) ((Math.random() * 5) + 1);
-						if (n2 == 1){
-							twentfive++;
-							deck.add(((Math.random() * 106) + 1), );
-						}
+					if (i <= 10){
+						deck.add(e)
 					}
-					
 				}
 			}
 		});
