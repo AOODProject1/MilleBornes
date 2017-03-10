@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -28,10 +30,13 @@ import javax.swing.JPanel;
 import millebornes.card.Card;
 import millebornes.card.HazardCard;
 import millebornes.card.MovementCard;
+import millebornes.card.RemedyCard;
+import millebornes.card.SafetyCard;
 import millebornes.util.CardName;
 //http://www.codex99.com/design/images/mille/cards_us_1960_lg.jpg
 public class Screen1 {
 	static JFrame f;
+	static Random r = new Random();
 	static JPanel playerCards;
 	static JPanel compCards;
 	static JPanel deckCards;
@@ -66,7 +71,6 @@ public class Screen1 {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		paneSafeties.setBounds((int)screenSize.getWidth() - 100, 0, 100, 1136);
 		paneNonSafeties.setLayout(new BoxLayout(paneNonSafeties, BoxLayout.Y_AXIS));
-		//compCards.setSize(width, height);
 		paneNonSafeties.add(compCards);
 		paneNonSafeties.add(compRunCards);
 		paneNonSafeties.add(deckCards);
@@ -77,7 +81,6 @@ public class Screen1 {
 		bar.add(load);
 		bar.add(help);
 		bar.add(quit);
-		
 		quit.addActionListener(new QuitListener());
 		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
@@ -111,9 +114,40 @@ public class Screen1 {
 						deck.add(new MovementCard(CardName.MILE_100));
 					} else if(i <= 46){
 						deck.add(new MovementCard(CardName.MILE_200));
-					}  else if(i <= 49){
+					} else if(i <= 49){
 						deck.add(new HazardCard(CardName.OUT_OF_GAS));
+					} else if(i <= 52){
+						deck.add(new HazardCard(CardName.FLAT_TIRE));
+					} else if(i <= 55){
+						deck.add(new HazardCard(CardName.ACCIDENT));
+					} else if(i <= 59){
+						deck.add(new HazardCard(CardName.SPEED_LIMIT));
+					} else if(i <= 64){
+						deck.add(new HazardCard(CardName.STOP));
+					} else if(i <= 70){
+						deck.add(new RemedyCard(CardName.GAS));
+					} else if(i <= 76){
+						deck.add(new RemedyCard(CardName.SPARE_TIRE));
+					} else if(i <= 82){
+						deck.add(new RemedyCard(CardName.REPAIRS));
+					} else if(i <= 88){
+						deck.add(new RemedyCard(CardName.END_SPEED_LIMIT));
+					} else if(i <= 102){
+						deck.add(new RemedyCard(CardName.ROLL));
+					} else if(i == 103){
+						deck.add(new SafetyCard(CardName.EXTRA_TANK));
+					} else if(i == 104){
+						deck.add(new SafetyCard(CardName.PUNCTURE_PROOF));
+					} else if(i == 105){
+						deck.add(new SafetyCard(CardName.DRIVING_ACE));
+					} else if(i == 106){
+						deck.add(new SafetyCard(CardName.RIGHT_OF_WAY));
 					}
+				}
+				Collections.shuffle(deck);
+				for (int c = 0; c < 7; c++){
+					comp[c] = deck.remove(0);
+					player[c] = deck.remove(0);
 				}
 			}
 		});
