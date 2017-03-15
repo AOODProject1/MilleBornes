@@ -7,15 +7,11 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import millebornes.card.Card;
-import millebornes.card.HazardCard;
 
 public class ImageGrab {
-	public static void main(String[] args) {
-		Image i = getCardBack();//new HazardCard(CardName.ACCIDENT));
-	}
 	public static Image getCardGraphic(Card c) {
 		try {
-			return ImageIO.read(new File("/mbcards/"+c.getName().toString().toLowerCase()));
+			return ImageIO.read(new File("mbcards/"+c.getName().toString().toLowerCase()+".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -23,7 +19,7 @@ public class ImageGrab {
 	}
 	public static Image getCardBack() {
 		try {
-			return ImageIO.read(new File("/mbcards/back.png"));
+			return ImageIO.read(new File("mbcards/back.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
