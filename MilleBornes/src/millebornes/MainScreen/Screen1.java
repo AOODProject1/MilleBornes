@@ -84,13 +84,6 @@ public class Screen1 {
 		quit.addActionListener(new QuitListener());
 		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				compCards.removeAll();
-				compRunCards.removeAll();
-				deckCards.removeAll();
-				playerCards.removeAll();
-				playerRunCards.removeAll();
-				playerCards.removeAll();
-				paneSafeties.removeAll();
 				player = null;
 				comp = null;
 				playerSafeties = null;
