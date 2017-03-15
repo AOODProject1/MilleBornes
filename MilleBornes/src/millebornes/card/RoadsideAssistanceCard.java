@@ -10,7 +10,7 @@ public class RoadsideAssistanceCard extends SavingCard {
 	private static final long serialVersionUID = -4737711052446490926L;
 
 	public RoadsideAssistanceCard() {
-		super(CardName.ROADSIDE_ASSISTANCE, new HazardCard(CardName.ACCIDENT));
+		super(CardName.ROADSIDE_ASSISTANCE);
 	}
 	@Override
 	public boolean counters(HazardCard c) {

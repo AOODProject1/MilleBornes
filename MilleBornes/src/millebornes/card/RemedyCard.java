@@ -9,8 +9,8 @@ import millebornes.util.CardName;
 public class RemedyCard extends SavingCard {
 	private static final long serialVersionUID = 2708224905239756537L;
 
-	public RemedyCard(CardName name,HazardCard counter) {
-		super(name,counter);
+	public RemedyCard(CardName name) {
+		super(name);
 	}
 
 }
