@@ -11,7 +11,7 @@ import millebornes.card.Card;
 public class ImageGrab {
 	public static Image getCardGraphic(Card c) {
 		try {
-			return ImageIO.read(new File("mbcards/"+c.getName().toString().toLowerCase()+".png"));
+			return ImageIO.read(new File("mbcards/"+c.getName().toString()+".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
