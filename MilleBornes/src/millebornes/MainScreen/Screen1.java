@@ -8,6 +8,9 @@ import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,6 +24,7 @@ import java.util.Random;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,6 +32,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.TransferHandler;
+import javax.swing.TransferHandler.TransferSupport;
 
 import millebornes.card.Card;
 import millebornes.card.HazardCard;
@@ -243,5 +249,35 @@ public class Screen1 {
 			System.exit(0);
 	}
 	
-	
+	/**
+	 * This class allows the cards to be dragged and dropped on other cards. To implement, make an instance of this class
+	 * the TransferHandler of a JLabel with an Icon, rather than text. Then, enable DnD through a MouseAdapter each JLabel
+	 * whose TransferHandler is this
+	 * @author Morgan
+	 *
+	 */
+	private class ImageTransferer extends TransferHandler {
+		private static final long serialVersionUID = -19201102892920628L;
+		private JLabel source;
+		public ImageTransferer(){
+			super("icon");
+		}
+		@Override
+		public void exportAsDrag(JComponent source, InputEvent e, int action) {
+			super.exportAsDrag(source,e,action);
+			this.source = (JLabel)source;
+		}
+		@Override
+		public boolean canImport(TransferSupport support) {
+			if (!super.canImport(support)) return false;
+			if (!support.isDrop()) return false;
+			//INSERT CONDITIONS HERE ------------
+			
+			//if (source.getIcon().equals(i3) && ((JLabel)support.getComponent()).getIcon().equals(i2)) //Example of condition
+					//return false;																      //Replace with easier-to read type
+			
+			//END CONDITION INSERTION ------------
+			return true;
+		}
+	}
 }
