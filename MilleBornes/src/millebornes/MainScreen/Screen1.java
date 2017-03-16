@@ -19,9 +19,11 @@ import java.util.Collections;
 import java.util.Random;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -33,6 +35,7 @@ import millebornes.card.MovementCard;
 import millebornes.card.RemedyCard;
 import millebornes.card.SafetyCard;
 import millebornes.util.CardName;
+import millebornes.util.ImageGrab;
 //http://www.codex99.com/design/images/mille/cards_us_1960_lg.jpg
 public class Screen1 {
 	static JFrame f;
@@ -42,6 +45,9 @@ public class Screen1 {
 	static JPanel deckCards;
 	static JPanel playerRunCards;
 	static JPanel compRunCards;
+	static JLabel playerCardGraphics[] = new JLabel[7];
+	static JLabel compCardGraphics[] = new JLabel[7];
+	static JLabel deckCardGraphic;
 	private static  Card[]player  = new Card[6];
 	private static  Card[]comp  = new Card[6];
 	private static  Card[]playerSafeties  = new Card[4];
@@ -59,6 +65,7 @@ public class Screen1 {
 	}
 	public static void show(String p){
 		f = new JFrame("Mille Bornes");
+		ImageGrab.loadCards();
 		f.setExtendedState(f.MAXIMIZED_BOTH);
 		JMenuBar bar = new JMenuBar();
 		JMenuItem help = new JMenuItem("Help");
@@ -71,11 +78,8 @@ public class Screen1 {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		paneSafeties.setBounds((int)screenSize.getWidth() - 100, 0, 100, 1136);
 		paneNonSafeties.setLayout(new BoxLayout(paneNonSafeties, BoxLayout.Y_AXIS));
-		paneNonSafeties.add(compCards);
-		paneNonSafeties.add(compRunCards);
-		paneNonSafeties.add(deckCards);
-		paneNonSafeties.add(playerRunCards);
-		paneNonSafeties.add(playerCards);
+		//paneNonSafeties.add(playerRunCards);
+		//paneNonSafeties.add(playerCards);
 		bar.add(newGame);
 		bar.add(save);
 		bar.add(load);
@@ -136,12 +140,21 @@ public class Screen1 {
 					} else if(i == 106){
 						deck.add(new SafetyCard(CardName.RIGHT_OF_WAY));
 					}
+					deckCardGraphic = new JLabel(new ImageIcon(ImageGrab.getCardBack()));
+					deckCards.add(deckCardGraphic);
 				}
 				Collections.shuffle(deck);
 				for (int c = 0; c < 7; c++){
 					comp[c] = deck.remove(0);
 					player[c] = deck.remove(0);
+					playerCardGraphics[c] = new JLabel(new ImageIcon(ImageGrab.getCardGraphic(player[c].getName())));
+					compCardGraphics[c] = new JLabel(new ImageIcon(ImageGrab.getCardBack()));
+					playerCards.add(playerCardGraphics[c]);
+					compCards.add(compCardGraphics[c]);
 				}
+				paneNonSafeties.add(compCards);
+				paneNonSafeties.add(compRunCards);
+				paneNonSafeties.add(deckCards);
 			}
 		});
 		save.addActionListener(new ActionListener() {

@@ -18,11 +18,11 @@ public class keyComponent extends JComponent{
 		g2.drawString("Key", 70, 260);
 		g2.setColor(Color.RED);
 		g2.drawString("Hazard", 70, 300);
-		g2.setColor(Color.GREEN);
-		g2.drawString("Remedy", 70, 340);
-		g2.setColor(Color.CYAN);
-		g2.drawString("Safety", 70, 380);
 		g2.setColor(Color.YELLOW);
+		g2.drawString("Remedy", 70, 340);
+		g2.setColor(Color.GREEN);
+		g2.drawString("Safety", 70, 380);
+		g2.setColor(Color.BLUE);
 		g2.drawString("Distance", 70, 420);
 	}
 }

@@ -41,10 +41,10 @@ public enum CardName {
 		case MILE_50:return "50 Miles";
 		case MILE_75:return "75 Miles";
 		case OUT_OF_GAS:return "Out of Gas";
-		case PUNCTURE_PROOF:return "Pucture-proof";
+		case PUNCTURE_PROOF:return "Puncture-proof";
 		case REPAIRS:return "Repairs";
 		case RIGHT_OF_WAY:return "Right of Way";
-		case ROADSIDE_ASSISTANCE:return "Roadside Assidtance";
+		case ROADSIDE_ASSISTANCE:return "Roadside Assistance";
 		case ROLL:return "Roll"; //Go!
 		case SPARE_TIRE:return "Spare Tire";
 		case SPEED_LIMIT:return "Speed Limit";

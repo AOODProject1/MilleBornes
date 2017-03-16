@@ -20,10 +20,12 @@ public class ImageGrab {
 	 * <br><b>THIS MUST BE CALLED BEFORE USING OTHER ImageGrab METHODS!!!!! (Preferably at startup)</b>
 	 */
 	public static void loadCards() {
+		cards = new HashMap<>();
 		for (CardName c : CardName.values()){
 			try {
 				cards.put(c, ImageIO.read(new File("mbcards/"+c.toString()+".png")));
 			} catch (IOException e) {
+				System.err.println(c);
 				e.printStackTrace();
 			}
 		}
