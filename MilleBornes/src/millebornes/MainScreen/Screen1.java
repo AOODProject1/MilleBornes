@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -252,7 +253,7 @@ public class Screen1 {
 	/**
 	 * This class allows the cards to be dragged and dropped on other cards. To implement, make an instance of this class
 	 * the TransferHandler of a JLabel with an Icon, rather than text. Then, enable DnD through a MouseAdapter each JLabel
-	 * whose TransferHandler is this
+	 * whose TransferHandler is this by callind
 	 * @author Morgan
 	 *
 	 */
@@ -272,12 +273,58 @@ public class Screen1 {
 			if (!super.canImport(support)) return false;
 			if (!support.isDrop()) return false;
 			//INSERT CONDITIONS HERE ------------
-			
-			//if (source.getIcon().equals(i3) && ((JLabel)support.getComponent()).getIcon().equals(i2)) //Example of condition
-					//return false;																      //Replace with easier-to read type
-			
+			CardName selectedCard = getNameFromIcon(source.getIcon());
+			CardName underCard = getNameFromIcon(((JLabel)support.getComponent()).getIcon());
+			//enter conditions based on getCardType and where source is
 			//END CONDITION INSERTION ------------
-			return true;
+			return false;
+		}
+	}
+	private static CardName getNameFromIcon(Icon icon) {
+		for (CardName c : CardName.values()) {
+			if (new ImageIcon(ImageGrab.getCardGraphic(c)).equals(icon)) return c;
+		}
+		return null;
+	}
+	private static final int HAZARD=0,DISTANCE=1,REMEDY=2,SAFETY=3,SPEED=4,ROLL=5,STOP=6;
+	private static int getCardType(CardName a) {
+		switch (a) {
+		case ACCIDENT:
+		case FLAT_TIRE:
+		case OUT_OF_GAS:
+			return HAZARD;
+			
+		case DRIVING_ACE:
+		case PUNCTURE_PROOF:
+		case RIGHT_OF_WAY:
+		case EXTRA_TANK:
+			return SAFETY;
+			
+		case GAS:
+		case REPAIRS:
+		case ROADSIDE_ASSISTANCE:
+		case SPARE_TIRE:
+			return REMEDY;
+			
+		case MILE_100:
+		case MILE_200:
+		case MILE_25:
+		case MILE_50:
+		case MILE_75:
+			return DISTANCE;
+			
+		case END_SPEED_LIMIT:
+		case SPEED_LIMIT:
+			return SPEED;
+			
+		case ROLL:
+			return ROLL;
+			
+		case STOP:
+			return STOP;
+			
+		default:
+			return -1;
 		}
 	}
 }
