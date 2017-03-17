@@ -49,12 +49,12 @@ public class Screen1 {
 	static Random r = new Random();
 	static JPanel playerCards;
 	static JPanel compCards;
+	static JPanel paneNonSafeties;//large panel with all cards but safeties
 	static JPanel deckCards;
 	static JPanel playerRunCards;
 	static JPanel compRunCards;
 	static JLabel playerCardGraphics[] = new JLabel[7];
 	static JLabel compCardGraphics[] = new JLabel[7];
-	static JLabel deckCardGraphic;
 	private static  Card[]player  = new Card[6];
 	private static  Card[]comp  = new Card[6];
 	private static  Card[]playerSafeties  = new Card[4];
@@ -80,13 +80,21 @@ public class Screen1 {
 		JMenuItem save = new JMenuItem("Save As");
 		JMenuItem quit = new JMenuItem("Quit");
 		JMenuItem newGame = new JMenuItem("New Game");
-		JPanel paneNonSafeties = new JPanel();
-		JPanel paneSafeties = new JPanel();
+		JPanel paneSafeties = new JPanel();//large panel with all safety cards
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		paneSafeties.setBounds((int)screenSize.getWidth() - 100, 0, 100, 1136);
+		paneNonSafeties = new JPanel();
+		playerCards = new JPanel();
+		deckCards = new JPanel();
+		compCards = new JPanel();
+		playerRunCards = new JPanel();
+		compRunCards = new JPanel();
 		paneNonSafeties.setLayout(new BoxLayout(paneNonSafeties, BoxLayout.Y_AXIS));
-		//paneNonSafeties.add(playerRunCards);
-		//paneNonSafeties.add(playerCards);
+		paneNonSafeties.add(compCards);
+		paneNonSafeties.add(compRunCards);
+		paneNonSafeties.add(deckCards);
+		paneNonSafeties.add(playerRunCards);
+		paneNonSafeties.add(playerCards);
 		bar.add(newGame);
 		bar.add(save);
 		bar.add(load);
@@ -95,19 +103,19 @@ public class Screen1 {
 		quit.addActionListener(new QuitListener());
 		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				player = null;
-				comp = null;
-				playerSafeties = null;
-				compSafeties = null;
+				player = new Card[7];
+				comp = new Card[7];
+				playerSafeties = new Card[4];
+				compSafeties = new Card[4];
 				hazardPlayer = null;
 				limitPlayer = null;
 				milagePlayer = null;
 				hazardComp = null;
 				limitComp = null;
 				milageComp = null;
-				deck.clear();
-				discard.clear();
-				for (int i = 0; i < 105; i++){
+				deck = new ArrayList<>();
+				discard = new ArrayList<>();
+				for (int i = 0; i < 107; i++){
 					if (i <= 10){
 						deck.add(new MovementCard(CardName.MILE_25));
 					} else if(i <= 20){
@@ -147,8 +155,7 @@ public class Screen1 {
 					} else if(i == 106){
 						deck.add(new SafetyCard(CardName.RIGHT_OF_WAY));
 					}
-					deckCardGraphic = new JLabel(new ImageIcon(ImageGrab.getCardBack()));
-					deckCards.add(deckCardGraphic);
+					deckCards.add(new JLabel(new ImageIcon(ImageGrab.getCardBack())));
 				}
 				Collections.shuffle(deck);
 				for (int c = 0; c < 7; c++){
@@ -159,9 +166,6 @@ public class Screen1 {
 					playerCards.add(playerCardGraphics[c]);
 					compCards.add(compCardGraphics[c]);
 				}
-				paneNonSafeties.add(compCards);
-				paneNonSafeties.add(compRunCards);
-				paneNonSafeties.add(deckCards);
 			}
 		});
 		save.addActionListener(new ActionListener() {
