@@ -41,20 +41,27 @@ import millebornes.card.HazardCard;
 import millebornes.card.MovementCard;
 import millebornes.card.RemedyCard;
 import millebornes.card.SafetyCard;
+import millebornes.card.SpeedHazardCard;
 import millebornes.util.CardName;
 import millebornes.util.ImageGrab;
 //http://www.codex99.com/design/images/mille/cards_us_1960_lg.jpg
 public class Screen1 {
 	static JFrame f;
 	static Random r = new Random();
-	static JPanel playerCards;
-	static JPanel compCards;
-	static JPanel deckCards;
-	static JPanel playerRunCards;
-	static JPanel compRunCards;
+	static JPanel playerCards; //Player's Hand
+	static JPanel compCards; //Computer's Hand
+	static JPanel deckCards; //Deck & Discard
+	static JPanel playerRunCards; //Battle/Limit/Mileage
+	static JPanel compRunCards; //"
 	static JLabel playerCardGraphics[] = new JLabel[7];
 	static JLabel compCardGraphics[] = new JLabel[7];
-	static JLabel deckCardGraphic;
+	private static JLabel playerBattle;
+	private static JLabel playerSpeed;
+	private static JLabel playerMileage;
+	private static JLabel compBattle;
+	private static JLabel compSpeed;
+	private static JLabel compMileage;
+	
 	private static  Card[]player  = new Card[6];
 	private static  Card[]comp  = new Card[6];
 	private static  Card[]playerSafeties  = new Card[4];
@@ -147,8 +154,7 @@ public class Screen1 {
 					} else if(i == 106){
 						deck.add(new SafetyCard(CardName.RIGHT_OF_WAY));
 					}
-					deckCardGraphic = new JLabel(new ImageIcon(ImageGrab.getCardBack()));
-					deckCards.add(deckCardGraphic);
+					deckCards.add(new JLabel(new ImageIcon(ImageGrab.getCardBack())));
 				}
 				Collections.shuffle(deck);
 				for (int c = 0; c < 7; c++){
@@ -253,7 +259,7 @@ public class Screen1 {
 	/**
 	 * This class allows the cards to be dragged and dropped on other cards. To implement, make an instance of this class
 	 * the TransferHandler of a JLabel with an Icon, rather than text. Then, enable DnD through a MouseAdapter each JLabel
-	 * whose TransferHandler is this by callind
+	 * whose TransferHandler is this by calling exportAsDrag
 	 * @author Morgan
 	 *
 	 */
@@ -273,8 +279,44 @@ public class Screen1 {
 			if (!super.canImport(support)) return false;
 			if (!support.isDrop()) return false;
 			//INSERT CONDITIONS HERE ------------
+			JLabel onto = ((JLabel)support.getComponent());
 			CardName selectedCard = getNameFromIcon(source.getIcon());
-			CardName underCard = getNameFromIcon(((JLabel)support.getComponent()).getIcon());
+			CardName underCard = getNameFromIcon(onto.getIcon());
+			if (onto == playerBattle) { //Playing onto player's battle pile
+				if (getCardType(selectedCard) == REMEDY && getCardType(underCard)==HAZARD) { //Countering Hazard
+					return true;
+				}
+				if (getCardType(selectedCard) == ROLL && getCardType(underCard) == REMEDY) { //Playing Roll after a remedy
+					return true;
+				}
+			} else if (onto == compBattle){ //Playing onto computer's Battle Pile
+				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == ROLL) {
+					return true;
+				}
+				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == REMEDY) {
+					return true;
+				}
+			} else if (onto == playerSpeed) { //Playing on own Speed Limit Pile
+				if (getCardType(selectedCard) == ENDSPEEDLIM && getCardType(underCard) == SPEEDLIM) { //Ending a speed limit
+					return true;
+				}
+			} else if (onto == compSpeed) { //Playing on Computer's speed pile
+				if (getCardType(selectedCard) == SPEEDLIM && getCardType(underCard) == ENDSPEEDLIM) {
+					
+				}
+			} else if (onto == playerMileage) { //Playing on own distance
+				if (getCardType(selectedCard) == DISTANCE && hazardPlayer.getName() == CardName.ROLL) {
+					if (limitPlayer.getName() == CardName.SPEED_LIMIT) {
+						if (selectedCard == CardName.MILE_25 || selectedCard == CardName.MILE_50) {
+							return true;
+						}
+						return false;
+					}
+					return true;
+				}
+			} else if (onto == compMileage) { //Playing onto computer's distance
+				return false;
+			}
 			//enter conditions based on getCardType and where source is
 			//END CONDITION INSERTION ------------
 			return false;
@@ -286,7 +328,7 @@ public class Screen1 {
 		}
 		return null;
 	}
-	private static final int HAZARD=0,DISTANCE=1,REMEDY=2,SAFETY=3,SPEED=4,ROLL=5,STOP=6;
+	private static final int HAZARD=0,DISTANCE=1,REMEDY=2,SAFETY=3,SPEEDLIM=4,ROLL=5,STOP=6,ENDSPEEDLIM=7;
 	private static int getCardType(CardName a) {
 		switch (a) {
 		case ACCIDENT:
@@ -314,8 +356,9 @@ public class Screen1 {
 			return DISTANCE;
 			
 		case END_SPEED_LIMIT:
+			return ENDSPEEDLIM;
 		case SPEED_LIMIT:
-			return SPEED;
+			return SPEEDLIM;
 			
 		case ROLL:
 			return ROLL;
