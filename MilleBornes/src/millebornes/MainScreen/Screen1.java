@@ -1,8 +1,10 @@
 package millebornes.MainScreen;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Toolkit;
@@ -35,6 +37,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
 import javax.swing.TransferHandler.TransferSupport;
+import javax.swing.border.Border;
 
 import millebornes.card.Card;
 import millebornes.card.HazardCard;
@@ -89,6 +92,9 @@ public class Screen1 {
 		compCards = new JPanel();
 		playerRunCards = new JPanel();
 		compRunCards = new JPanel();
+		paneNonSafeties.setBackground(Color.CYAN);
+		paneSafeties.setBackground(Color.GREEN);
+		f.setLayout(new GridBagLayout());
 		paneNonSafeties.setLayout(new BoxLayout(paneNonSafeties, BoxLayout.Y_AXIS));
 		paneNonSafeties.add(compCards);
 		paneNonSafeties.add(compRunCards);
@@ -155,16 +161,18 @@ public class Screen1 {
 					} else if(i == 106){
 						deck.add(new SafetyCard(CardName.RIGHT_OF_WAY));
 					}
-					deckCards.add(new JLabel(new ImageIcon(ImageGrab.getCardBack())));
 				}
+				deckCards.add(new JLabel(new ImageIcon(ImageGrab.getCardBack())));
 				Collections.shuffle(deck);
 				for (int c = 0; c < 7; c++){
+					System.out.println(deck.get(0));
 					comp[c] = deck.remove(0);
 					player[c] = deck.remove(0);
 					playerCardGraphics[c] = new JLabel(new ImageIcon(ImageGrab.getCardGraphic(player[c].getName())));
 					compCardGraphics[c] = new JLabel(new ImageIcon(ImageGrab.getCardBack()));
 					playerCards.add(playerCardGraphics[c]);
 					compCards.add(compCardGraphics[c]);
+					
 				}
 			}
 		});
@@ -232,9 +240,10 @@ public class Screen1 {
 			}
 		});
 		keyComponent component = new keyComponent();
-		f.add(paneSafeties);
 		f.add(paneNonSafeties);
-		f.add(component);
+		f.add(paneSafeties);
+		paneNonSafeties.add(new JLabel (new ImageIcon(ImageGrab.getCardGraphic(CardName.DRIVING_ACE))));
+		//f.add(component);
 		f.setJMenuBar(bar);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
