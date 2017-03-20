@@ -239,6 +239,11 @@ public class Screen1 {
 				//set to-dos as a file chosen by user
 			}
 		});
+		help.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(f, "Important rules: A player can not move without haveing a Go card on the top of their battle pile. \nFirst player to 1000 miles wins the game (the player must hit exactly 1000 miles to win, you cant go over).");
+			}
+		});
 		keyComponent component = new keyComponent();
 		f.add(paneNonSafeties);
 		f.add(paneSafeties);
