@@ -6,6 +6,9 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -33,6 +36,7 @@ import millebornes.card.Card;
 import millebornes.card.HazardCard;
 import millebornes.card.MovementCard;
 import millebornes.card.RemedyCard;
+import millebornes.card.RoadsideAssistanceCard;
 import millebornes.card.SafetyCard;
 import millebornes.card.SpeedHazardCard;
 import millebornes.util.CardName;
@@ -95,6 +99,7 @@ public class Screen1 {
 		paneSafeties.setBackground(Color.GREEN);
 		f.setLayout(new BoxLayout(f.getContentPane(),BoxLayout.LINE_AXIS));
 		init();
+		deckCards.add(new JLabel(new ImageIcon(ImageGrab.getCardBack())));
 		paneNonSafeties.setLayout(new BoxLayout(paneNonSafeties, BoxLayout.Y_AXIS));
 		paneNonSafeties.add(compCards);
 		paneNonSafeties.add(compRunCards);
@@ -180,6 +185,13 @@ public class Screen1 {
 				JOptionPane.showMessageDialog(f, "Important rules: A player can not move without haveing a Go card on the top of their battle pile. \nFirst player to 1000 miles wins the game (the player must hit exactly 1000 miles to win, you cant go over).");
 			}
 		});
+		f.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_N)
+					init();
+			}
+		});
 		keyComponent component = new keyComponent();
 		f.add(component);
 		f.add(paneNonSafeties);
@@ -216,7 +228,7 @@ public class Screen1 {
 		milageComp = null;
 		deck = new ArrayList<>();
 		discard = new ArrayList<>();
-		for (int i = 0; i < 107; i++){
+		for (int i = 0; i < 110; i++){
 			if (i <= 10){
 				deck.add(new MovementCard(CardName.MILE_25));
 			} else if(i <= 20){
@@ -255,14 +267,15 @@ public class Screen1 {
 				deck.add(new SafetyCard(CardName.DRIVING_ACE));
 			} else if(i == 106){
 				deck.add(new SafetyCard(CardName.RIGHT_OF_WAY));
+			} else if (i <= 109){
+				deck.add(new RoadsideAssistanceCard());
 			}
 		}
-		deckCards.add(new JLabel(new ImageIcon(ImageGrab.getCardBack())));
 		Collections.shuffle(deck);
 		playerCards.removeAll();
 		compCards.removeAll();
 		for (int c = 0; c < 7; c++){
-			//System.out.println(deck.get(0));
+			System.out.println(deck.get(1).getName());
 			comp[c] = deck.remove(0);
 			player[c] = deck.remove(0);
 			playerCardGraphics[c] = new JLabel(new ImageIcon(ImageGrab.getCardGraphic(player[c].getName())));
@@ -270,7 +283,9 @@ public class Screen1 {
 			playerCards.add(playerCardGraphics[c]);
 			compCards.add(compCardGraphics[c]);
 		}
+		playerCards.revalidate();
 		playerCards.repaint();
+		compCards.revalidate();
 		compCards.repaint();
 	}
 	/**
