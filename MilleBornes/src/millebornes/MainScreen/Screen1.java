@@ -1,18 +1,11 @@
 package millebornes.MainScreen;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,7 +19,6 @@ import java.util.Random;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -36,8 +28,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
-import javax.swing.TransferHandler.TransferSupport;
-import javax.swing.border.Border;
 
 import millebornes.card.Card;
 import millebornes.card.HazardCard;
@@ -94,7 +84,8 @@ public class Screen1 {
 		compRunCards = new JPanel();
 		paneNonSafeties.setBackground(Color.CYAN);
 		paneSafeties.setBackground(Color.GREEN);
-		f.setLayout(new GridBagLayout());
+		f.setLayout(new BoxLayout(f.getContentPane(),BoxLayout.LINE_AXIS));
+		init();
 		paneNonSafeties.setLayout(new BoxLayout(paneNonSafeties, BoxLayout.Y_AXIS));
 		paneNonSafeties.add(compCards);
 		paneNonSafeties.add(compRunCards);
@@ -109,71 +100,7 @@ public class Screen1 {
 		quit.addActionListener(new QuitListener());
 		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				player = new Card[7];
-				comp = new Card[7];
-				playerSafeties = new Card[4];
-				compSafeties = new Card[4];
-				hazardPlayer = null;
-				limitPlayer = null;
-				milagePlayer = null;
-				hazardComp = null;
-				limitComp = null;
-				milageComp = null;
-				deck = new ArrayList<>();
-				discard = new ArrayList<>();
-				for (int i = 0; i < 107; i++){
-					if (i <= 10){
-						deck.add(new MovementCard(CardName.MILE_25));
-					} else if(i <= 20){
-						deck.add(new MovementCard(CardName.MILE_50));
-					} else if(i <= 30){
-						deck.add(new MovementCard(CardName.MILE_75));
-					} else if(i <= 42){
-						deck.add(new MovementCard(CardName.MILE_100));
-					} else if(i <= 46){
-						deck.add(new MovementCard(CardName.MILE_200));
-					} else if(i <= 49){
-						deck.add(new HazardCard(CardName.OUT_OF_GAS));
-					} else if(i <= 52){
-						deck.add(new HazardCard(CardName.FLAT_TIRE));
-					} else if(i <= 55){
-						deck.add(new HazardCard(CardName.ACCIDENT));
-					} else if(i <= 59){
-						deck.add(new HazardCard(CardName.SPEED_LIMIT));
-					} else if(i <= 64){
-						deck.add(new HazardCard(CardName.STOP));
-					} else if(i <= 70){
-						deck.add(new RemedyCard(CardName.GAS));
-					} else if(i <= 76){
-						deck.add(new RemedyCard(CardName.SPARE_TIRE));
-					} else if(i <= 82){
-						deck.add(new RemedyCard(CardName.REPAIRS));
-					} else if(i <= 88){
-						deck.add(new RemedyCard(CardName.END_SPEED_LIMIT));
-					} else if(i <= 102){
-						deck.add(new RemedyCard(CardName.ROLL));
-					} else if(i == 103){
-						deck.add(new SafetyCard(CardName.EXTRA_TANK));
-					} else if(i == 104){
-						deck.add(new SafetyCard(CardName.PUNCTURE_PROOF));
-					} else if(i == 105){
-						deck.add(new SafetyCard(CardName.DRIVING_ACE));
-					} else if(i == 106){
-						deck.add(new SafetyCard(CardName.RIGHT_OF_WAY));
-					}
-				}
-				deckCards.add(new JLabel(new ImageIcon(ImageGrab.getCardBack())));
-				Collections.shuffle(deck);
-				for (int c = 0; c < 7; c++){
-					System.out.println(deck.get(0));
-					comp[c] = deck.remove(0);
-					player[c] = deck.remove(0);
-					playerCardGraphics[c] = new JLabel(new ImageIcon(ImageGrab.getCardGraphic(player[c].getName())));
-					compCardGraphics[c] = new JLabel(new ImageIcon(ImageGrab.getCardBack()));
-					playerCards.add(playerCardGraphics[c]);
-					compCards.add(compCardGraphics[c]);
-					
-				}
+				init();
 			}
 		});
 		save.addActionListener(new ActionListener() {
@@ -240,10 +167,10 @@ public class Screen1 {
 			}
 		});
 		keyComponent component = new keyComponent();
+		f.add(component);
 		f.add(paneNonSafeties);
 		f.add(paneSafeties);
-		paneNonSafeties.add(new JLabel (new ImageIcon(ImageGrab.getCardGraphic(CardName.DRIVING_ACE))));
-		//f.add(component);
+		//paneNonSafeties.add(new JLabel (new ImageIcon(ImageGrab.getCardGraphic(CardName.DRIVING_ACE))));
 		f.setJMenuBar(bar);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
@@ -262,7 +189,76 @@ public class Screen1 {
 		if (confirm == JOptionPane.YES_OPTION) // person doesn't want to leave
 			System.exit(0);
 	}
-	
+	private static void init() {
+		player = new Card[7];
+		comp = new Card[7];
+		playerSafeties = new Card[4];
+		compSafeties = new Card[4];
+		hazardPlayer = null;
+		limitPlayer = null;
+		milagePlayer = null;
+		hazardComp = null;
+		limitComp = null;
+		milageComp = null;
+		deck = new ArrayList<>();
+		discard = new ArrayList<>();
+		for (int i = 0; i < 107; i++){
+			if (i <= 10){
+				deck.add(new MovementCard(CardName.MILE_25));
+			} else if(i <= 20){
+				deck.add(new MovementCard(CardName.MILE_50));
+			} else if(i <= 30){
+				deck.add(new MovementCard(CardName.MILE_75));
+			} else if(i <= 42){
+				deck.add(new MovementCard(CardName.MILE_100));
+			} else if(i <= 46){
+				deck.add(new MovementCard(CardName.MILE_200));
+			} else if(i <= 49){
+				deck.add(new HazardCard(CardName.OUT_OF_GAS));
+			} else if(i <= 52){
+				deck.add(new HazardCard(CardName.FLAT_TIRE));
+			} else if(i <= 55){
+				deck.add(new HazardCard(CardName.ACCIDENT));
+			} else if(i <= 59){
+				deck.add(new HazardCard(CardName.SPEED_LIMIT));
+			} else if(i <= 64){
+				deck.add(new HazardCard(CardName.STOP));
+			} else if(i <= 70){
+				deck.add(new RemedyCard(CardName.GAS));
+			} else if(i <= 76){
+				deck.add(new RemedyCard(CardName.SPARE_TIRE));
+			} else if(i <= 82){
+				deck.add(new RemedyCard(CardName.REPAIRS));
+			} else if(i <= 88){
+				deck.add(new RemedyCard(CardName.END_SPEED_LIMIT));
+			} else if(i <= 102){
+				deck.add(new RemedyCard(CardName.ROLL));
+			} else if(i == 103){
+				deck.add(new SafetyCard(CardName.EXTRA_TANK));
+			} else if(i == 104){
+				deck.add(new SafetyCard(CardName.PUNCTURE_PROOF));
+			} else if(i == 105){
+				deck.add(new SafetyCard(CardName.DRIVING_ACE));
+			} else if(i == 106){
+				deck.add(new SafetyCard(CardName.RIGHT_OF_WAY));
+			}
+		}
+		deckCards.add(new JLabel(new ImageIcon(ImageGrab.getCardBack())));
+		Collections.shuffle(deck);
+		playerCards.removeAll();
+		compCards.removeAll();
+		for (int c = 0; c < 7; c++){
+			//System.out.println(deck.get(0));
+			comp[c] = deck.remove(0);
+			player[c] = deck.remove(0);
+			playerCardGraphics[c] = new JLabel(new ImageIcon(ImageGrab.getCardGraphic(player[c].getName())));
+			compCardGraphics[c] = new JLabel(new ImageIcon(ImageGrab.getCardBack()));
+			playerCards.add(playerCardGraphics[c]);
+			compCards.add(compCardGraphics[c]);
+		}
+		playerCards.repaint();
+		compCards.repaint();
+	}
 	/**
 	 * This class allows the cards to be dragged and dropped on other cards. To implement, make an instance of this class
 	 * the TransferHandler of a JLabel with an Icon, rather than text. Then, enable DnD through a MouseAdapter each JLabel

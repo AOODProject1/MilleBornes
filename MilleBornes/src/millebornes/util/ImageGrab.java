@@ -29,7 +29,7 @@ public class ImageGrab {
 			}
 		}
 		try {
-			cardBack = ImageIO.read(new File("mbcards/back.png"));
+			cardBack = ImageIO.read(new File("mbcards/MilleBornesCardBack.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
