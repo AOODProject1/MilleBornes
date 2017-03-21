@@ -97,8 +97,6 @@ public class Screen1 {
 		compCards = new JPanel();
 		playerRunCards = new JPanel();
 		compRunCards = new JPanel();
-		paneNonSafeties.setBackground(Color.CYAN);
-		paneSafeties.setBackground(Color.GREEN);
 		f.setLayout(new BoxLayout(f.getContentPane(),BoxLayout.LINE_AXIS));
 		init();
 		deckCards.add(new JLabel(new ImageIcon(ImageGrab.getCardBack())));
@@ -184,7 +182,7 @@ public class Screen1 {
 		});
 		help.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(f, "Important rules: A player can not move without haveing a Go card on the top of their battle pile. \nFirst player to 1000 miles wins the game (the player must hit exactly 1000 miles to win, you cant go over).");
+				JOptionPane.showMessageDialog(f, "Important rules: A player can not move without having a 'Go' card on the top of their battle pile. \nFirst player to 1000 miles wins the game (the player must hit exactly 1000 miles to win, you cant go over).\nSafety cards protect a the player from the hazard that corresponds to that safety (Ex: Out Of Gas : Extra Tank).\nCoup Fourre: If an opponent plays a Hazard Card and you hold the corresponding Safety Card, immediately Call 'Coup Fourre' and play the Safety Card to your Safety Area crosswise (horizontally). If you call 'Coup Fourre', you must do so before you draw a card.");
 			}
 		});
 		f.addKeyListener(new KeyAdapter() {
@@ -277,7 +275,6 @@ public class Screen1 {
 		playerCards.removeAll();
 		compCards.removeAll();
 		for (int c = 0; c < 7; c++){
-			System.out.println(deck.get(1).getName());
 			comp[c] = deck.remove(0);
 			player[c] = deck.remove(0);
 			playerCardGraphics[c] = new JLabel(new ImageIcon(ImageGrab.getCardGraphic(player[c].getName())));
@@ -285,7 +282,7 @@ public class Screen1 {
 			playerCardGraphics[c].addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					JLabel source = (JLabel)(e.getSource());
-					source.getTransferHandler().exportAsDrag(source, e, TransferHandler.MOVE);
+					source.getTransferHandler().exportAsDrag(source, e, TransferHandler.COPY);
 				}
 			});
 			compCardGraphics[c] = new JLabel(new ImageIcon(ImageGrab.getCardBack()));
