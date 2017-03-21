@@ -9,6 +9,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -279,6 +281,13 @@ public class Screen1 {
 			comp[c] = deck.remove(0);
 			player[c] = deck.remove(0);
 			playerCardGraphics[c] = new JLabel(new ImageIcon(ImageGrab.getCardGraphic(player[c].getName())));
+			playerCardGraphics[c].setTransferHandler(new ImageTransferer());
+			playerCardGraphics[c].addMouseListener(new MouseAdapter() {
+				public void mousePressed(MouseEvent e) {
+					JLabel source = (JLabel)(e.getSource());
+					source.getTransferHandler().exportAsDrag(source, e, TransferHandler.MOVE);
+				}
+			});
 			compCardGraphics[c] = new JLabel(new ImageIcon(ImageGrab.getCardBack()));
 			playerCards.add(playerCardGraphics[c]);
 			compCards.add(compCardGraphics[c]);
@@ -295,7 +304,7 @@ public class Screen1 {
 	 * @author Morgan
 	 *
 	 */
-	private class ImageTransferer extends TransferHandler {
+	private static class ImageTransferer extends TransferHandler {
 		private static final long serialVersionUID = -19201102892920628L;
 		private JLabel source;
 		public ImageTransferer(){
