@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -22,7 +21,6 @@ import java.util.Collections;
 import java.util.Random;
 
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -40,7 +38,6 @@ import millebornes.card.MovementCard;
 import millebornes.card.RemedyCard;
 import millebornes.card.RoadsideAssistanceCard;
 import millebornes.card.SafetyCard;
-import millebornes.card.SpeedHazardCard;
 import millebornes.util.CardName;
 import millebornes.util.ImageGrab;
 //http://www.codex99.com/design/images/mille/cards_us_1960_lg.jpg
@@ -53,14 +50,14 @@ public class Screen1 {
 	static JPanel deckCards; //Deck & Discard
 	static JPanel playerRunCards; //Battle/Limit/Mileage
 	static JPanel compRunCards; //"
-	static JLabel playerCardGraphics[] = new JLabel[7];
-	static JLabel compCardGraphics[] = new JLabel[7];
-	private static JLabel playerBattle;
-	private static JLabel playerSpeed;
-	private static JLabel playerMileage;
-	private static JLabel compBattle;
-	private static JLabel compSpeed;
-	private static JLabel compMileage;
+	static CardLabel playerCardGraphics[] = new CardLabel[7];
+	static CardLabel compCardGraphics[] = new CardLabel[7];
+	private static CardLabel playerBattle;
+	private static CardLabel playerSpeed;
+	private static CardLabel playerMileage;
+	private static CardLabel compBattle;
+	private static CardLabel compSpeed;
+	private static CardLabel compMileage;
 	static JPanel paneNonSafeties;//large panel with all cards but safeties
 
 	private static  Card[]player  = new Card[6];
@@ -280,15 +277,19 @@ public class Screen1 {
 			System.out.println(deck.get(1).getName());
 			comp[c] = deck.remove(0);
 			player[c] = deck.remove(0);
-			playerCardGraphics[c] = new JLabel(new ImageIcon(ImageGrab.getCardGraphic(player[c].getName())));
+			if (playerCardGraphics[c]==null) {
+				playerCardGraphics[c] = new CardLabel((player[c].getName()));
+			} else {
+				playerCardGraphics[c].setIcon(new ImageIcon(ImageGrab.getCardGraphic(player[c].getName())));
+			}
 			playerCardGraphics[c].setTransferHandler(new ImageTransferer());
 			playerCardGraphics[c].addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					JLabel source = (JLabel)(e.getSource());
-					source.getTransferHandler().exportAsDrag(source, e, TransferHandler.MOVE);
+					source.getTransferHandler().exportAsDrag(source, e, TransferHandler.COPY);
 				}
 			});
-			compCardGraphics[c] = new JLabel(new ImageIcon(ImageGrab.getCardBack()));
+			compCardGraphics[c] = new CardLabel();
 			playerCards.add(playerCardGraphics[c]);
 			compCards.add(compCardGraphics[c]);
 		}
@@ -306,23 +307,24 @@ public class Screen1 {
 	 */
 	private static class ImageTransferer extends TransferHandler {
 		private static final long serialVersionUID = -19201102892920628L;
-		private JLabel source;
+		private static CardLabel source;
 		public ImageTransferer(){
 			super("icon");
 		}
 		@Override
 		public void exportAsDrag(JComponent source, InputEvent e, int action) {
 			super.exportAsDrag(source,e,action);
-			this.source = (JLabel)source;
+			ImageTransferer.source = (CardLabel)source; //exportAsDrag is only called once per dnd operation
 		}
 		@Override
 		public boolean canImport(TransferSupport support) {
 			if (!super.canImport(support)) return false;
 			if (!support.isDrop()) return false;
 			//INSERT CONDITIONS HERE ------------
-			JLabel onto = ((JLabel)support.getComponent());
-			CardName selectedCard = getNameFromIcon(source.getIcon());
-			CardName underCard = getNameFromIcon(onto.getIcon());
+			CardLabel onto = ((CardLabel)support.getComponent());
+			CardName selectedCard = source.getCardName();
+			CardName underCard  = onto.getCardName();
+			System.out.println(selectedCard + " , " + underCard);
 			if (onto == playerBattle) { //Playing onto player's battle pile
 				if (getCardType(selectedCard) == REMEDY && getCardType(underCard)==HAZARD) { //Countering Hazard
 					return true;
@@ -362,12 +364,6 @@ public class Screen1 {
 			//END CONDITION INSERTION ------------
 			return false;
 		}
-	}
-	private static CardName getNameFromIcon(Icon icon) {
-		for (CardName c : CardName.values()) {
-			if (new ImageIcon(ImageGrab.getCardGraphic(c)).equals(icon)) return c;
-		}
-		return null;
 	}
 	private static final int HAZARD=0,DISTANCE=1,REMEDY=2,SAFETY=3,SPEEDLIM=4,ROLL=5,STOP=6,ENDSPEEDLIM=7;
 	private static int getCardType(CardName a) {
