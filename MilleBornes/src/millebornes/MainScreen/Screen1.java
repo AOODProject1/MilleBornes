@@ -171,13 +171,19 @@ public class Screen1 {
 						hazardComp = ((Card)(p.readObject()));
 						limitComp = ((Card)(p.readObject()));
 						milageComp = ((Card)(p.readObject()));
+						for (int i = 0; i < playerCardGraphics.length; i++){
+							playerCardGraphics[i].setIcon(new ImageIcon(ImageGrab.getCardGraphic(player[i].getName())));
+							playerCardGraphics[i].revalidate();
+							playerCardGraphics[i].repaint();
+						}
+						playerCards.revalidate();
+						playerCards.repaint();
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					} catch (ClassNotFoundException e1) {
 						e1.printStackTrace();
 					}
 				}
-				//set to-dos as a file chosen by user
 			}
 		});
 		help.addActionListener(new ActionListener() {
