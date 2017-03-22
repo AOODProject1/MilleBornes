@@ -16,4 +16,43 @@ public abstract class Card implements Serializable {
 	public boolean equals(Card c) {
 		return c.name==name;
 	}
+	public static Card getCardFromName(CardName c) {
+		switch (c) {
+		case ACCIDENT:
+		case FLAT_TIRE:
+		case OUT_OF_GAS:
+		case STOP:
+			return new HazardCard(c);
+			
+		case DRIVING_ACE:
+		case PUNCTURE_PROOF:
+		case RIGHT_OF_WAY:
+		case EXTRA_TANK:
+		case ROLL:
+			return new SafetyCard(c);
+			
+		case GAS:
+		case REPAIRS:
+		case SPARE_TIRE:
+			return new RemedyCard(c);
+		case ROADSIDE_ASSISTANCE:
+			return new RoadsideAssistanceCard();
+			
+		case MILE_100:
+		case MILE_200:
+		case MILE_25:
+		case MILE_50:
+		case MILE_75:
+			return new MovementCard(c);
+			
+		case END_SPEED_LIMIT:
+			return new EndSpeedLimitCard();
+		case SPEED_LIMIT:
+			return new SpeedHazardCard();
+			
+		case DEFAULT:
+		default:
+			return new DefaultCard();
+		}
+	}
 }
