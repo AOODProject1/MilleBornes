@@ -1,6 +1,5 @@
 package millebornes.MainScreen;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -21,11 +20,9 @@ import java.util.Collections;
 import java.util.Random;
 
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -96,7 +93,7 @@ public class Screen1 {
 		compRunCards = new JPanel();
 		f.setLayout(new BoxLayout(f.getContentPane(),BoxLayout.LINE_AXIS));
 		init();
-		deckCards.add(new JLabel(new ImageIcon(ImageGrab.getCardBack())));
+		deckCards.add(new CardLabel());
 		paneNonSafeties.setLayout(new BoxLayout(paneNonSafeties, BoxLayout.Y_AXIS));
 		paneNonSafeties.add(compCards);
 		paneNonSafeties.add(compRunCards);
@@ -169,7 +166,7 @@ public class Screen1 {
 						limitComp = ((Card)(p.readObject()));
 						milageComp = ((Card)(p.readObject()));
 						for (int i = 0; i < playerCardGraphics.length; i++){
-							playerCardGraphics[i].setIcon(new ImageIcon(ImageGrab.getCardGraphic(player[i].getName())));
+							playerCardGraphics[i].setCardName(player[i].getName());
 							playerCardGraphics[i].revalidate();
 							playerCardGraphics[i].repaint();
 						}
@@ -199,7 +196,6 @@ public class Screen1 {
 		f.add(component);
 		f.add(paneNonSafeties);
 		f.add(paneSafeties);
-		//paneNonSafeties.add(new JLabel (new ImageIcon(ImageGrab.getCardGraphic(CardName.DRIVING_ACE))));
 		f.setJMenuBar(bar);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
@@ -283,12 +279,12 @@ public class Screen1 {
 			if (playerCardGraphics[c]==null) {
 				playerCardGraphics[c] = new CardLabel((player[c].getName()));
 			} else {
-				playerCardGraphics[c].setIcon(new ImageIcon(ImageGrab.getCardGraphic(player[c].getName())));
+				playerCardGraphics[c].setCardName(player[c].getName());
 			}
 			playerCardGraphics[c].setTransferHandler(new ImageTransferer());
 			playerCardGraphics[c].addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
-					JLabel source = (JLabel)(e.getSource());
+					CardLabel source = (CardLabel)(e.getSource());
 					source.getTransferHandler().exportAsDrag(source, e, TransferHandler.COPY);
 				}
 			});
@@ -303,7 +299,7 @@ public class Screen1 {
 	}
 	/**
 	 * This class allows the cards to be dragged and dropped on other cards. To implement, make an instance of this class
-	 * the TransferHandler of a JLabel with an Icon, rather than text. Then, enable DnD through a MouseAdapter each JLabel
+	 * the TransferHandler of a CardLabel. Then, enable DnD through a MouseAdapter each CardLabel
 	 * whose TransferHandler is this by calling exportAsDrag
 	 * @author Morgan
 	 *
