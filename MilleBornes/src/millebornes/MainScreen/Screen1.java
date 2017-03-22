@@ -207,7 +207,6 @@ public class Screen1 {
 		f.add(component);
 		f.add(paneNonSafeties);
 		f.add(paneSafeties);
-		//paneNonSafeties.add(new JLabel (new ImageIcon(ImageGrab.getCardGraphic(CardName.DRIVING_ACE))));
 		f.setJMenuBar(bar);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
