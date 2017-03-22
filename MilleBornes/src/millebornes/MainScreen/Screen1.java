@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -103,6 +104,13 @@ public class Screen1 {
 		paneNonSafeties.add(deckCards);
 		paneNonSafeties.add(playerRunCards);
 		paneNonSafeties.add(playerCards);
+		playerRunCards.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		compRunCards.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		for (int l = 0; l < 3; l++){
+			playerRunCards.add(new CardLabel(CardName.DEFAULT));
+			compRunCards.add(new CardLabel(CardName.DEFAULT));
+		}
+		f.pack();
 		bar.add(newGame);
 		bar.add(save);
 		bar.add(load);
