@@ -241,6 +241,12 @@ public class Screen1 {
 			System.exit(0);
 	}
 	private static void init() {
+		playerBattle.setCardName(CardName.DEFAULT);
+		playerSpeed.setCardName(CardName.DEFAULT);
+		playerMileage.setCardName(CardName.DEFAULT);
+		compBattle.setCardName(CardName.DEFAULT);
+		compSpeed.setCardName(CardName.DEFAULT);
+		compMileage.setCardName(CardName.DEFAULT);
 		player = new Card[7];
 		comp = new Card[7];
 		playerSafeties = new Card[4];
