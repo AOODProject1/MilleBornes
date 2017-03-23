@@ -359,10 +359,10 @@ public class Screen1 {
 		public boolean canImport(TransferSupport support) {
 			if (!super.canImport(support)) return false;
 			if (!support.isDrop()) return false;
+			CardLabel onto = ((CardLabel)support.getComponent()); //Where the card is being played
+			CardName selectedCard = source.getCardName(); //Name of card being dragged
+			CardName underCard  = onto.getCardName(); //Name of card being dragged onto
 			//INSERT CONDITIONS HERE ------------
-			CardLabel onto = ((CardLabel)support.getComponent());
-			CardName selectedCard = source.getCardName();
-			CardName underCard  = onto.getCardName();
 			if (onto == playerBattle) { //Playing onto player's battle pile
 				if (getCardType(selectedCard) == REMEDY && getCardType(underCard)==HAZARD) { //Countering Hazard
 					return true;
@@ -412,7 +412,7 @@ public class Screen1 {
 				}
 			} else if (onto == compSpeed) { //Playing on Computer's speed pile
 				if (getCardType(selectedCard) == SPEEDLIM && getCardType(underCard) == ENDSPEEDLIM) {
-					
+					return true;
 				}
 				if (getCardType(selectedCard) == SPEEDLIM && getCardType(underCard) == BLANK) {
 					return true;
