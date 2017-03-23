@@ -17,7 +17,10 @@ public class ImageGrab {
 	private static Image cardBack;
 	/**
 	 * Loads the cards for each CardName into a HashMap for faster processing and less calls to the card files themselves.
-	 * <br><b>THIS MUST BE CALLED BEFORE USING OTHER ImageGrab METHODS!!!!! (Preferably at startup)</b>
+	 * <br><b>THIS MUST BE CALLED BEFORE USING OTHER ImageGrab METHODS!!!!! (Preferably at startup)</b><br>
+	 * This takes the list of names in the enum CardName and checks for a file with the same name as the cardNames' toString()
+	 * method in the directory mbcards/. For example, {@code CardName.MILE_25} returns "25 Miles" in its toString() method, so
+	 * ImageGrab searches for mbcards/25 Miles.png
 	 */
 	public static void loadCards() {
 		for (CardName c : CardName.values()){
