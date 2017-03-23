@@ -434,18 +434,24 @@ public class Screen1 {
 			boolean result = super.importData(support);
 			CardName c = source.getCardName();
 			if (dest == playerBattle) {
+				playerBattle.setCardName(c);
 				hazardPlayer = Card.getCardFromName(c);
 			} else if (dest == playerSpeed) {
+				playerSpeed.setCardName(c);
 				limitPlayer = Card.getCardFromName(c);
 			} else if (dest == playerMileage) {
+				playerMileage.setCardName(c);
 				mileagePlayer = Card.getCardFromName(c);
 				playerDistance += ((MovementCard)mileagePlayer).getDistance();
 			} else if (dest == compBattle) {
+				compBattle.setCardName(c);
 				hazardComp = Card.getCardFromName(c);
 			} else if (dest == compSpeed) {
+				compSpeed.setCardName(c);
 				limitComp = Card.getCardFromName(c);
 			} else if (dest == compMileage) {
 				//Shouldn't be the case, but included for completeness' sake
+				compMileage.setCardName(c);
 				mileageComp = Card.getCardFromName(c);
 				compDistance += ((MovementCard)mileageComp).getDistance();
 			}
