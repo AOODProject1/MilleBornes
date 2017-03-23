@@ -339,7 +339,7 @@ public class Screen1 {
 	}
 	/**
 	 * This class allows the cards to be dragged and dropped on other cards. To implement, make an instance of this class
-	 * the TransferHandler of a CardLabel. Then, enable DnD through a MouseAdapter each CardLabel
+	 * the TransferHandler of a CardLabel. Then, enable DnD through a MouseAdapter connected to each CardLabel
 	 * whose TransferHandler is this by calling exportAsDrag
 	 * @author Morgan
 	 *
