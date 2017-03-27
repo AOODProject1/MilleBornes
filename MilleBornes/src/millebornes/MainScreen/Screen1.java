@@ -31,6 +31,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.TransferHandler;
 
 import millebornes.card.Card;
@@ -83,6 +84,7 @@ public class Screen1 {
 	private static Integer compDistance=0;
 	private static  ArrayList<Card>deck;
 	private static  ArrayList<Card>discard;
+	private static DeckLabel deckLabel;
 	public static void main (String[] args){
 		show("Default");
 	}
@@ -107,8 +109,11 @@ public class Screen1 {
 		compCards = new JPanel();
 		playerRunCards = new JPanel();
 		compRunCards = new JPanel();
+		CardLabel key = new CardLabel(CardName.KEY_CARD);
 		JLabel compSaftiesName = new JLabel("Computer Safeties");
-		compSaftiesName.setHorizontalAlignment();
+		JLabel playerSaftiesName = new JLabel("Player Safeties");
+		playerSaftiesName.setHorizontalAlignment(SwingConstants.CENTER);
+		compSaftiesName.setHorizontalAlignment(SwingConstants.CENTER);
 		f.setLayout(new BoxLayout(f.getContentPane(),BoxLayout.LINE_AXIS));
 		init();
 		playerBattle.setTransferHandler(new ImageTransferer());
@@ -123,6 +128,7 @@ public class Screen1 {
 		compRunCards.add(compBattle);
 		compRunCards.add(compSpeed);
 		compRunCards.add(compMileage);
+		playerPaneSafeties.add(playerSaftiesName);
 		playerPaneSafeties.add(playerSafety1);
 		playerPaneSafeties.add(playerSafety2);
 		playerPaneSafeties.add(playerSafety3);
@@ -132,7 +138,9 @@ public class Screen1 {
 		compPaneSafeties.add(compSafety2);
 		compPaneSafeties.add(compSafety3);
 		compPaneSafeties.add(compSafety4);
-		deckCards.add(new CardLabel());
+		deckCards.add(key);
+		deckCards.add(deckLabel);
+		deckCards.add(new CardLabel(CardName.DEFAULT));
 		playerPaneSafeties.setLayout(new GridLayout(5, 1));
 		compPaneSafeties.setLayout(new GridLayout(5, 1));
 		paneNonSafeties.setLayout(new BoxLayout(paneNonSafeties, BoxLayout.Y_AXIS));
@@ -239,10 +247,8 @@ public class Screen1 {
 					init();
 			}
 		});
-		keyComponent component = new keyComponent();
 		f.add(compPaneSafeties);
 		f.add(paneNonSafeties);
-		deckCards.add(component);
 		f.add(playerPaneSafeties);
 		f.setJMenuBar(bar);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -347,6 +353,7 @@ public class Screen1 {
 			compCardGraphics[c] = new CardLabel();
 			playerCards.add(playerCardGraphics[c]);
 			compCards.add(compCardGraphics[c]);
+			deckLabel = new DeckLabel(deck);
 		}
 		playerBattle = new CardLabel(CardName.DEFAULT);
 		playerSpeed = new CardLabel(CardName.DEFAULT);
