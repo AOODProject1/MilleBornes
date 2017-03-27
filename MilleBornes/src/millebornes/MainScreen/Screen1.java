@@ -34,19 +34,26 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.TransferHandler;
 
+import millebornes.ai.AI;
+import millebornes.ai.DistanceAI;
 import millebornes.card.Card;
 import millebornes.card.DefaultCard;
+import millebornes.card.DefaultSpeedCard;
 import millebornes.card.HazardCard;
 import millebornes.card.MovementCard;
 import millebornes.card.RemedyCard;
 import millebornes.card.RoadsideAssistanceCard;
 import millebornes.card.SafetyCard;
+import millebornes.card.SpeedCard;
 import millebornes.util.CardName;
+import millebornes.util.Constants;
 import millebornes.util.ImageGrab;
 //http://www.codex99.com/design/images/mille/cards_us_1960_lg.jpg
 public class Screen1 {
 	static JFrame f;
 	static Random r = new Random();
+
+	private static AI compPlayer;
 	static JPanel playerCards; //Player's Hand
 	static JPanel compCards; //Computer's Hand
 	static JPanel deckCards; //Deck & Discard
@@ -70,15 +77,15 @@ public class Screen1 {
 	private static CardLabel compSafety4;
 	static JPanel paneNonSafeties;//large panel with all cards but safeties
 
-	private static  Card[]player  = new Card[6];
-	private static  Card[]comp  = new Card[6];
-	private static  Card[]playerSafeties  = new Card[4];
-	private static  Card[]compSafeties  = new Card[4];
+	private static Card[]player  = new Card[6];
+	private static Card[]comp  = new Card[6];
+	private static SafetyCard[]playerSafeties  = new SafetyCard[4];
+	private static SafetyCard[]compSafeties  = new SafetyCard[4];
 	private static Card hazardPlayer;
-	private static Card limitPlayer;
+	private static SpeedCard limitPlayer;
 	private static Card mileagePlayer;
 	private static Card hazardComp;
-	private static Card limitComp;
+	private static SpeedCard limitComp;
 	private static Card mileageComp;
 	private static Integer playerDistance=0;
 	private static Integer compDistance=0;
@@ -86,6 +93,7 @@ public class Screen1 {
 	private static  ArrayList<Card>discard;
 	private static DeckLabel deckLabel;
 	public static void main (String[] args){
+		compPlayer = new DistanceAI();
 		show("Default");
 	}
 	public static void show(String p){
@@ -212,21 +220,26 @@ public class Screen1 {
 						discard = ((ArrayList<Card>)(p.readObject()));
 						player = ((Card[])(p.readObject()));
 						comp = ((Card[])(p.readObject()));
-						playerSafeties = ((Card[])(p.readObject()));
-						compSafeties = ((Card[])(p.readObject()));
+						playerSafeties = ((SafetyCard[])(p.readObject()));
+						compSafeties = ((SafetyCard[])(p.readObject()));
 						hazardPlayer = ((Card)(p.readObject()));
-						limitPlayer = ((Card)(p.readObject()));
+						limitPlayer = ((SpeedCard)(p.readObject()));
 						mileagePlayer = ((Card)(p.readObject()));
 						hazardComp = ((Card)(p.readObject()));
-						limitComp = ((Card)(p.readObject()));
+						limitComp = ((SpeedCard)(p.readObject()));
 						mileageComp = ((Card)(p.readObject()));
 						for (int i = 0; i < playerCardGraphics.length; i++){
 							playerCardGraphics[i].setCardName(player[i].getName());
 							playerCardGraphics[i].revalidate();
 							playerCardGraphics[i].repaint();
 						}
-						playerCards.revalidate();
-						playerCards.repaint();
+						playerBattle.setCardName(hazardPlayer.getName());
+						playerSpeed.setCardName(limitPlayer.getName());
+						playerMileage.setCardName(mileagePlayer.getName());
+						compBattle.setCardName(hazardComp.getName());
+						
+						//playerCards.revalidate();
+						//playerCards.repaint();
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					} catch (ClassNotFoundException e1) {
@@ -269,10 +282,16 @@ public class Screen1 {
 			System.exit(0);
 	}
 	private static void init() {
+		playerBattle.setCardName(CardName.DEFAULT);
+		playerSpeed.setCardName(CardName.DEFAULT);
+		playerMileage.setCardName(CardName.DEFAULT);
+		compBattle.setCardName(CardName.DEFAULT);
+		compSpeed.setCardName(CardName.DEFAULT);
+		compMileage.setCardName(CardName.DEFAULT);
 		player = new Card[7];
 		comp = new Card[7];
-		playerSafeties = new Card[4];
-		compSafeties = new Card[4];
+		playerSafeties = new SafetyCard[4];
+		compSafeties = new SafetyCard[4];
 		hazardPlayer = null;
 		limitPlayer = null;
 		mileagePlayer = null;
@@ -280,11 +299,11 @@ public class Screen1 {
 		limitComp = null;
 		mileageComp = null;
 		hazardPlayer = new DefaultCard();
-		limitPlayer = new DefaultCard();
+		limitPlayer = new DefaultSpeedCard();
 		mileagePlayer = new DefaultCard();
 		playerDistance = 0;
 		hazardComp = new DefaultCard();
-		limitComp = new DefaultCard();
+		limitComp = new DefaultSpeedCard();
 		mileageComp = new DefaultCard();
 		compDistance = 0;
 		deck = new ArrayList<>();
@@ -376,7 +395,7 @@ public class Screen1 {
 	}
 	/**
 	 * This class allows the cards to be dragged and dropped on other cards. To implement, make an instance of this class
-	 * the TransferHandler of a CardLabel. Then, enable DnD through a MouseAdapter each CardLabel
+	 * the TransferHandler of a CardLabel. Then, enable DnD through a MouseAdapter connected to each CardLabel
 	 * whose TransferHandler is this by calling exportAsDrag
 	 * @author Morgan
 	 *
@@ -396,10 +415,10 @@ public class Screen1 {
 		public boolean canImport(TransferSupport support) {
 			if (!super.canImport(support)) return false;
 			if (!support.isDrop()) return false;
+			CardLabel onto = ((CardLabel)support.getComponent()); //Where the card is being played
+			CardName selectedCard = source.getCardName(); //Name of card being dragged
+			CardName underCard  = onto.getCardName(); //Name of card being dragged onto
 			//INSERT CONDITIONS HERE ------------
-			CardLabel onto = ((CardLabel)support.getComponent());
-			CardName selectedCard = source.getCardName();
-			CardName underCard  = onto.getCardName();
 			if (onto == playerBattle) { //Playing onto player's battle pile
 				if (getCardType(selectedCard) == REMEDY && getCardType(underCard)==HAZARD) { //Countering Hazard
 					return true;
@@ -449,7 +468,7 @@ public class Screen1 {
 				}
 			} else if (onto == compSpeed) { //Playing on Computer's speed pile
 				if (getCardType(selectedCard) == SPEEDLIM && getCardType(underCard) == ENDSPEEDLIM) {
-					
+					return true;
 				}
 				if (getCardType(selectedCard) == SPEEDLIM && getCardType(underCard) == BLANK) {
 					return true;
@@ -477,20 +496,38 @@ public class Screen1 {
 			boolean result = super.importData(support);
 			CardName c = source.getCardName();
 			if (dest == playerBattle) {
+				playerBattle.setCardName(c);
 				hazardPlayer = Card.getCardFromName(c);
 			} else if (dest == playerSpeed) {
-				limitPlayer = Card.getCardFromName(c);
+				playerSpeed.setCardName(c);
+				limitPlayer = Card.getSpeedCardFromName(c);
 			} else if (dest == playerMileage) {
+				playerMileage.setCardName(c);
 				mileagePlayer = Card.getCardFromName(c);
 				playerDistance += ((MovementCard)mileagePlayer).getDistance();
 			} else if (dest == compBattle) {
+				compBattle.setCardName(c);
 				hazardComp = Card.getCardFromName(c);
 			} else if (dest == compSpeed) {
-				limitComp = Card.getCardFromName(c);
+				compSpeed.setCardName(c);
+				limitComp = Card.getSpeedCardFromName(c);
 			} else if (dest == compMileage) {
 				//Shouldn't be the case, but included for completeness' sake
+				compMileage.setCardName(c);
 				mileageComp = Card.getCardFromName(c);
 				compDistance += ((MovementCard)mileageComp).getDistance();
+			}
+			int[] compPlay = compPlayer.getBestCard(comp, hazardComp, compSafeties, compDistance, limitComp, hazardPlayer, playerSafeties, playerDistance, limitPlayer);
+			Card toPlay = comp[compPlay[0]];
+			switch (compPlay[1]) {
+			case Constants.OPPOSEBATTLE:
+			case Constants.OPPOSELIMIT:
+			case Constants.OWNBATTLE:
+			case Constants.OWNDIST:
+			case Constants.OWNLIMIT:
+			case Constants.OWNSAFETY:
+			case Constants.DISCARD:
+				default:
 			}
 			return result;
 		}
