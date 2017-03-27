@@ -196,8 +196,13 @@ public class Screen1 {
 							playerCardGraphics[i].revalidate();
 							playerCardGraphics[i].repaint();
 						}
-						playerCards.revalidate();
-						playerCards.repaint();
+						playerBattle.setCardName(hazardPlayer.getName());
+						playerSpeed.setCardName(limitPlayer.getName());
+						playerMileage.setCardName(mileagePlayer.getName());
+						compBattle.setCardName(hazardComp.getName());
+						
+						//playerCards.revalidate();
+						//playerCards.repaint();
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					} catch (ClassNotFoundException e1) {
