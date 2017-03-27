@@ -31,13 +31,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.TransferHandler;
 
+import millebornes.ai.AI;
+import millebornes.ai.DistanceAI;
 import millebornes.card.Card;
 import millebornes.card.DefaultCard;
+import millebornes.card.DefaultSpeedCard;
 import millebornes.card.HazardCard;
 import millebornes.card.MovementCard;
 import millebornes.card.RemedyCard;
 import millebornes.card.RoadsideAssistanceCard;
 import millebornes.card.SafetyCard;
+import millebornes.card.SpeedCard;
 import millebornes.util.CardName;
 import millebornes.util.ImageGrab;
 //http://www.codex99.com/design/images/mille/cards_us_1960_lg.jpg
@@ -45,6 +49,7 @@ public class Screen1 {
 	static JFrame f;
 	static Random r = new Random();
 
+	private static AI compPlayer;
 	static JPanel playerCards; //Player's Hand
 	static JPanel compCards; //Computer's Hand
 	static JPanel deckCards; //Deck & Discard
@@ -60,21 +65,22 @@ public class Screen1 {
 	private static CardLabel compMileage;
 	static JPanel paneNonSafeties;//large panel with all cards but safeties
 
-	private static  Card[]player  = new Card[6];
-	private static  Card[]comp  = new Card[6];
-	private static  Card[]playerSafeties  = new Card[4];
-	private static  Card[]compSafeties  = new Card[4];
+	private static Card[]player  = new Card[6];
+	private static Card[]comp  = new Card[6];
+	private static SafetyCard[]playerSafeties  = new SafetyCard[4];
+	private static SafetyCard[]compSafeties  = new SafetyCard[4];
 	private static Card hazardPlayer;
-	private static Card limitPlayer;
+	private static SpeedCard limitPlayer;
 	private static Card mileagePlayer;
 	private static Card hazardComp;
-	private static Card limitComp;
+	private static SpeedCard limitComp;
 	private static Card mileageComp;
 	private static Integer playerDistance=0;
 	private static Integer compDistance=0;
 	private static  ArrayList<Card>deck;
 	private static  ArrayList<Card>discard;
 	public static void main (String[] args){
+		compPlayer = new DistanceAI();
 		show("Default");
 	}
 	public static void show(String p){
@@ -183,13 +189,13 @@ public class Screen1 {
 						discard = ((ArrayList<Card>)(p.readObject()));
 						player = ((Card[])(p.readObject()));
 						comp = ((Card[])(p.readObject()));
-						playerSafeties = ((Card[])(p.readObject()));
-						compSafeties = ((Card[])(p.readObject()));
+						playerSafeties = ((SafetyCard[])(p.readObject()));
+						compSafeties = ((SafetyCard[])(p.readObject()));
 						hazardPlayer = ((Card)(p.readObject()));
-						limitPlayer = ((Card)(p.readObject()));
+						limitPlayer = ((SpeedCard)(p.readObject()));
 						mileagePlayer = ((Card)(p.readObject()));
 						hazardComp = ((Card)(p.readObject()));
-						limitComp = ((Card)(p.readObject()));
+						limitComp = ((SpeedCard)(p.readObject()));
 						mileageComp = ((Card)(p.readObject()));
 						for (int i = 0; i < playerCardGraphics.length; i++){
 							playerCardGraphics[i].setCardName(player[i].getName());
@@ -254,8 +260,8 @@ public class Screen1 {
 		compMileage.setCardName(CardName.DEFAULT);
 		player = new Card[7];
 		comp = new Card[7];
-		playerSafeties = new Card[4];
-		compSafeties = new Card[4];
+		playerSafeties = new SafetyCard[4];
+		compSafeties = new SafetyCard[4];
 		hazardPlayer = null;
 		limitPlayer = null;
 		mileagePlayer = null;
@@ -263,11 +269,11 @@ public class Screen1 {
 		limitComp = null;
 		mileageComp = null;
 		hazardPlayer = new DefaultCard();
-		limitPlayer = new DefaultCard();
+		limitPlayer = new DefaultSpeedCard();
 		mileagePlayer = new DefaultCard();
 		playerDistance = 0;
 		hazardComp = new DefaultCard();
-		limitComp = new DefaultCard();
+		limitComp = new DefaultSpeedCard();
 		mileageComp = new DefaultCard();
 		compDistance = 0;
 		deck = new ArrayList<>();
@@ -449,7 +455,7 @@ public class Screen1 {
 				hazardPlayer = Card.getCardFromName(c);
 			} else if (dest == playerSpeed) {
 				playerSpeed.setCardName(c);
-				limitPlayer = Card.getCardFromName(c);
+				limitPlayer = Card.getSpeedCardFromName(c);
 			} else if (dest == playerMileage) {
 				playerMileage.setCardName(c);
 				mileagePlayer = Card.getCardFromName(c);
@@ -459,13 +465,14 @@ public class Screen1 {
 				hazardComp = Card.getCardFromName(c);
 			} else if (dest == compSpeed) {
 				compSpeed.setCardName(c);
-				limitComp = Card.getCardFromName(c);
+				limitComp = Card.getSpeedCardFromName(c);
 			} else if (dest == compMileage) {
 				//Shouldn't be the case, but included for completeness' sake
 				compMileage.setCardName(c);
 				mileageComp = Card.getCardFromName(c);
 				compDistance += ((MovementCard)mileageComp).getDistance();
 			}
+			compPlayer.getBestCard(comp, hazardComp, compSafeties, compDistance, limitComp, hazardPlayer, playerSafeties, playerDistance, limitPlayer);
 			return result;
 		}
 	}

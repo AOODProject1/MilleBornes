@@ -45,14 +45,18 @@ public abstract class Card implements Serializable {
 		case MILE_75:
 			return new MovementCard(c);
 			
-		case END_SPEED_LIMIT:
-			return new EndSpeedLimitCard();
-		case SPEED_LIMIT:
-			return new SpeedHazardCard();
-			
 		case DEFAULT:
 		default:
 			return new DefaultCard();
 		}
+	}
+	public static SpeedCard getSpeedCardFromName(CardName c) {
+		switch (c) {
+		case END_SPEED_LIMIT:
+			return new EndSpeedLimitCard();
+		case SPEED_LIMIT:
+			return new SpeedHazardCard();
+		}
+		return new DefaultSpeedCard();
 	}
 }
