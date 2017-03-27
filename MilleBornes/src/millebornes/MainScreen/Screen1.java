@@ -43,6 +43,7 @@ import millebornes.card.RoadsideAssistanceCard;
 import millebornes.card.SafetyCard;
 import millebornes.card.SpeedCard;
 import millebornes.util.CardName;
+import millebornes.util.Constants;
 import millebornes.util.ImageGrab;
 //http://www.codex99.com/design/images/mille/cards_us_1960_lg.jpg
 public class Screen1 {
@@ -472,7 +473,18 @@ public class Screen1 {
 				mileageComp = Card.getCardFromName(c);
 				compDistance += ((MovementCard)mileageComp).getDistance();
 			}
-			compPlayer.getBestCard(comp, hazardComp, compSafeties, compDistance, limitComp, hazardPlayer, playerSafeties, playerDistance, limitPlayer);
+			int[] compPlay = compPlayer.getBestCard(comp, hazardComp, compSafeties, compDistance, limitComp, hazardPlayer, playerSafeties, playerDistance, limitPlayer);
+			Card toPlay = comp[compPlay[0]];
+			switch (compPlay[1]) {
+			case Constants.OPPOSEBATTLE:
+			case Constants.OPPOSELIMIT:
+			case Constants.OWNBATTLE:
+			case Constants.OWNDIST:
+			case Constants.OWNLIMIT:
+			case Constants.OWNSAFETY:
+			case Constants.DISCARD:
+				default:
+			}
 			return result;
 		}
 	}

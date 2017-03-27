@@ -7,7 +7,7 @@ import millebornes.card.SpeedCard;
 public interface AI {
 	/**
 	 * 
-	 * @return {card's index, where to play}
+	 * @return {card's index, where to play (as defined in Constants)}
 	 */
 	public int[] getBestCard(Card[] hand,
 			Card compBattle, SafetyCard[] compSafeties, int compDistance, SpeedCard compSpeed,
