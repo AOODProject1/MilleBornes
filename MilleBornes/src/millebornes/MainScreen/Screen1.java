@@ -404,6 +404,20 @@ public class Screen1 {
 					return true;
 				}
 			} else if (onto == compBattle){ //Playing onto computer's Battle Pile
+				//Shortcutting (no hazard/stop can be played on another)
+				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == HAZARD) {
+					return false;
+				}
+				if (getCardType(selectedCard) == STOP && getCardType(underCard) == STOP) {
+					return false;
+				}
+				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == STOP) {
+					return false;
+				}
+				if (getCardType(selectedCard) == STOP && getCardType(underCard) == HAZARD) {
+					return false;
+				}
+				
 				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == ROLL) {
 					return true;
 				}
@@ -411,6 +425,15 @@ public class Screen1 {
 					return true;
 				}
 				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == BLANK) {
+					return true;
+				}
+				if (getCardType(selectedCard) == STOP && getCardType(underCard) == ROLL) {
+					return true;
+				}
+				if (getCardType(selectedCard) == STOP && getCardType(underCard) == REMEDY) {
+					return true;
+				}
+				if (getCardType(selectedCard) == STOP && getCardType(underCard) == BLANK) {
 					return true;
 				}
 			} else if (onto == playerSpeed) { //Playing on own Speed Limit Pile
@@ -443,13 +466,11 @@ public class Screen1 {
 		}
 		@Override
 		public boolean importData(TransferSupport support) {
-			System.out.println("import_end");
 			CardLabel dest = (CardLabel)support.getComponent();
 			boolean result = super.importData(support);
 			CardName c = source.getCardName();
 			if (dest == playerBattle) {
 				hazardPlayer = Card.getCardFromName(c);
-				System.out.println(hazardPlayer.getName());
 			} else if (dest == playerSpeed) {
 				limitPlayer = Card.getCardFromName(c);
 			} else if (dest == playerMileage) {
