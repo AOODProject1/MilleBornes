@@ -2,6 +2,7 @@ package millebornes.MainScreen;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,10 +26,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.TransferHandler;
 
 import millebornes.ai.AI;
@@ -64,6 +67,14 @@ public class Screen1 {
 	private static CardLabel compBattle;
 	private static CardLabel compSpeed;
 	private static CardLabel compMileage;
+	private static CardLabel playerSafety1;
+	private static CardLabel playerSafety2;
+	private static CardLabel playerSafety3;
+	private static CardLabel playerSafety4;
+	private static CardLabel compSafety1;
+	private static CardLabel compSafety2;
+	private static CardLabel compSafety3;
+	private static CardLabel compSafety4;
 	static JPanel paneNonSafeties;//large panel with all cards but safeties
 
 	private static Card[]player  = new Card[6];
@@ -80,6 +91,7 @@ public class Screen1 {
 	private static Integer compDistance=0;
 	private static  ArrayList<Card>deck;
 	private static  ArrayList<Card>discard;
+	private static DeckLabel deckLabel;
 	public static void main (String[] args){
 		compPlayer = new DistanceAI();
 		show("Default");
@@ -94,30 +106,51 @@ public class Screen1 {
 		JMenuItem save = new JMenuItem("Save As");
 		JMenuItem quit = new JMenuItem("Quit");
 		JMenuItem newGame = new JMenuItem("New Game");
-		JPanel paneSafeties = new JPanel();//large panel with all safety cards
+		JPanel playerPaneSafeties = new JPanel();//large panel with all the player safety cards
+		JPanel compPaneSafeties = new JPanel();//large panel with all the comp safety cards
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		paneSafeties.setBounds((int)screenSize.getWidth() - 100, 0, 100, 1136);
+		playerPaneSafeties.setBounds((int)screenSize.getWidth() - 100, 0, 100, 1136);
+		compPaneSafeties.setBounds(0, 0, 100, 1136);;
 		paneNonSafeties = new JPanel();
 		playerCards = new JPanel();
 		deckCards = new JPanel();
 		compCards = new JPanel();
 		playerRunCards = new JPanel();
 		compRunCards = new JPanel();
-		playerBattle = new CardLabel(CardName.DEFAULT);
-		playerSpeed = new CardLabel(CardName.DEFAULT);
-		playerMileage = new CardLabel(CardName.DEFAULT);
-		compBattle = new CardLabel(CardName.DEFAULT);
-		compSpeed = new CardLabel(CardName.DEFAULT);
-		compMileage = new CardLabel(CardName.DEFAULT);
+		CardLabel key = new CardLabel(CardName.KEY_CARD);
+		JLabel compSaftiesName = new JLabel("Computer Safeties");
+		JLabel playerSaftiesName = new JLabel("Player Safeties");
+		playerSaftiesName.setHorizontalAlignment(SwingConstants.CENTER);
+		compSaftiesName.setHorizontalAlignment(SwingConstants.CENTER);
+		f.setLayout(new BoxLayout(f.getContentPane(),BoxLayout.LINE_AXIS));
+		init();
 		playerBattle.setTransferHandler(new ImageTransferer());
 		playerSpeed.setTransferHandler(new ImageTransferer());
 		playerMileage.setTransferHandler(new ImageTransferer());
 		compBattle.setTransferHandler(new ImageTransferer());
 		compSpeed.setTransferHandler(new ImageTransferer());
 		compMileage.setTransferHandler(new ImageTransferer());
-		f.setLayout(new BoxLayout(f.getContentPane(),BoxLayout.LINE_AXIS));
-		init();
-		deckCards.add(new CardLabel());
+		playerRunCards.add(playerBattle);
+		playerRunCards.add(playerSpeed);
+		playerRunCards.add(playerMileage);
+		compRunCards.add(compBattle);
+		compRunCards.add(compSpeed);
+		compRunCards.add(compMileage);
+		playerPaneSafeties.add(playerSaftiesName);
+		playerPaneSafeties.add(playerSafety1);
+		playerPaneSafeties.add(playerSafety2);
+		playerPaneSafeties.add(playerSafety3);
+		playerPaneSafeties.add(playerSafety4);
+		compPaneSafeties.add(compSaftiesName);
+		compPaneSafeties.add(compSafety1);
+		compPaneSafeties.add(compSafety2);
+		compPaneSafeties.add(compSafety3);
+		compPaneSafeties.add(compSafety4);
+		deckCards.add(key);
+		deckCards.add(deckLabel);
+		deckCards.add(new CardLabel(CardName.DEFAULT));
+		playerPaneSafeties.setLayout(new GridLayout(5, 1));
+		compPaneSafeties.setLayout(new GridLayout(5, 1));
 		paneNonSafeties.setLayout(new BoxLayout(paneNonSafeties, BoxLayout.Y_AXIS));
 		paneNonSafeties.add(compCards);
 		paneNonSafeties.add(compRunCards);
@@ -126,12 +159,9 @@ public class Screen1 {
 		paneNonSafeties.add(playerCards);
 		playerRunCards.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		compRunCards.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		playerRunCards.add(playerBattle);
-		playerRunCards.add(playerSpeed);
-		playerRunCards.add(playerMileage);
-		compRunCards.add(compBattle);
-		compRunCards.add(compSpeed);
-		compRunCards.add(compMileage);
+		playerPaneSafeties.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		compPaneSafeties.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		deckCards.setBorder(BorderFactory.createLineBorder(Color.CYAN));
 		f.pack();
 		bar.add(newGame);
 		bar.add(save);
@@ -230,10 +260,9 @@ public class Screen1 {
 					init();
 			}
 		});
-		keyComponent component = new keyComponent();
-		f.add(component);
+		f.add(compPaneSafeties);
 		f.add(paneNonSafeties);
-		f.add(paneSafeties);
+		f.add(playerPaneSafeties);
 		f.setJMenuBar(bar);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
@@ -343,7 +372,22 @@ public class Screen1 {
 			compCardGraphics[c] = new CardLabel();
 			playerCards.add(playerCardGraphics[c]);
 			compCards.add(compCardGraphics[c]);
+			deckLabel = new DeckLabel(deck);
 		}
+		playerBattle = new CardLabel(CardName.DEFAULT);
+		playerSpeed = new CardLabel(CardName.DEFAULT);
+		playerMileage = new CardLabel(CardName.DEFAULT);
+		compBattle = new CardLabel(CardName.DEFAULT);
+		compSpeed = new CardLabel(CardName.DEFAULT);
+		compMileage = new CardLabel(CardName.DEFAULT);
+		playerSafety1 = new CardLabel(CardName.DEFAULT);
+		playerSafety2 = new CardLabel(CardName.DEFAULT);
+		playerSafety3 = new CardLabel(CardName.DEFAULT);
+		playerSafety4 = new CardLabel(CardName.DEFAULT);
+		compSafety1 = new CardLabel(CardName.DEFAULT);
+		compSafety2 = new CardLabel(CardName.DEFAULT);
+		compSafety3 = new CardLabel(CardName.DEFAULT);
+		compSafety4 = new CardLabel(CardName.DEFAULT);
 		playerCards.revalidate();
 		playerCards.repaint();
 		compCards.revalidate();

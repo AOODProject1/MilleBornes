@@ -27,7 +27,7 @@ public enum CardName {
 	EXTRA_TANK,
 	
 	ROADSIDE_ASSISTANCE,
-	DEFAULT;
+	DEFAULT, KEY_CARD;
 	public String toString() {
 		switch (this) {
 		case ACCIDENT:return "Accident";
@@ -50,6 +50,7 @@ public enum CardName {
 		case ROLL:return "Roll"; //Go!
 		case SPARE_TIRE:return "Spare Tire";
 		case SPEED_LIMIT:return "Speed Limit";
+		case KEY_CARD:return "Key Card";
 		case STOP:return "Stop";
 		default: return null;
 		}
