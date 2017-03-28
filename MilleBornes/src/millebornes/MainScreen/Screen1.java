@@ -61,6 +61,10 @@ public class Screen1 {
 	static JPanel compRunCards; //"
 	static CardLabel playerCardGraphics[] = new CardLabel[7];
 	static CardLabel compCardGraphics[] = new CardLabel[7];
+	private static JLabel playerTotalDistance;
+	private static String pTD;
+	private static JLabel compTotalDistance;
+	private static String cTD;
 	private static CardLabel playerBattle;
 	private static CardLabel playerSpeed;
 	private static CardLabel playerMileage;
@@ -111,6 +115,8 @@ public class Screen1 {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		playerPaneSafeties.setBounds((int)screenSize.getWidth() - 100, 0, 100, 1136);
 		compPaneSafeties.setBounds(0, 0, 100, 1136);;
+		playerTotalDistance = new JLabel();
+		compTotalDistance = new JLabel();
 		paneNonSafeties = new JPanel();
 		playerCards = new JPanel();
 		deckCards = new JPanel();
@@ -147,9 +153,11 @@ public class Screen1 {
 		playerRunCards.add(playerBattle);
 		playerRunCards.add(playerSpeed);
 		playerRunCards.add(playerMileage);
+		playerRunCards.add(playerTotalDistance);
 		compRunCards.add(compBattle);
 		compRunCards.add(compSpeed);
 		compRunCards.add(compMileage);
+		compRunCards.add(compTotalDistance);
 		playerPaneSafeties.add(playerSaftiesName);
 		playerPaneSafeties.add(playerSafety1);
 		playerPaneSafeties.add(playerSafety2);
@@ -513,6 +521,8 @@ public class Screen1 {
 				playerMileage.setCardName(c);
 				mileagePlayer = Card.getCardFromName(c);
 				playerDistance += ((MovementCard)mileagePlayer).getDistance();
+				pTD = playerDistance + "Miles";
+				playerTotalDistance.setText(pTD);
 			} else if (dest == compBattle) {
 				compBattle.setCardName(c);
 				hazardComp = Card.getCardFromName(c);
