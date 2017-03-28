@@ -48,7 +48,7 @@ import millebornes.card.SpeedCard;
 import millebornes.util.CardName;
 import millebornes.util.Constants;
 import millebornes.util.ImageGrab;
-//http://www.codex99.com/design/images/mille/cards_us_1960_lg.jpg
+
 public class Screen1 {
 	static JFrame f;
 	static Random r = new Random();
@@ -61,6 +61,8 @@ public class Screen1 {
 	static JPanel compRunCards; //"
 	static CardLabel playerCardGraphics[] = new CardLabel[7];
 	static CardLabel compCardGraphics[] = new CardLabel[7];
+	private static JLabel illegalPlay;
+	private static String iP;
 	private static JLabel playerTotalDistance;
 	private static String pTD;
 	private static JLabel compTotalDistance;
@@ -115,6 +117,7 @@ public class Screen1 {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		playerPaneSafeties.setBounds((int)screenSize.getWidth() - 100, 0, 100, 1136);
 		compPaneSafeties.setBounds(0, 0, 100, 1136);;
+		illegalPlay = new JLabel();
 		playerTotalDistance = new JLabel();
 		compTotalDistance = new JLabel();
 		paneNonSafeties = new JPanel();
@@ -171,6 +174,7 @@ public class Screen1 {
 		deckCards.add(key);
 		deckCards.add(deckLabel);
 		deckCards.add(new CardLabel(CardName.DEFAULT));
+		deckCards.add(illegalPlay);
 		playerPaneSafeties.setLayout(new GridLayout(5, 1));
 		compPaneSafeties.setLayout(new GridLayout(5, 1));
 		paneNonSafeties.setLayout(new BoxLayout(paneNonSafeties, BoxLayout.Y_AXIS));
@@ -448,15 +452,23 @@ public class Screen1 {
 			} else if (onto == compBattle){ //Playing onto computer's Battle Pile
 				//Shortcutting (no hazard/stop can be played on another)
 				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == HAZARD) {
+					iP = "Cannot place a Hazard onto another Hazard.";
+					illegalPlay.setText(iP);
 					return false;
 				}
 				if (getCardType(selectedCard) == STOP && getCardType(underCard) == STOP) {
+					iP = "Cannot place a Stop onto another Stop.";
+					illegalPlay.setText(iP);
 					return false;
 				}
 				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == STOP) {
+					iP = "Cannot place a Hazard onto a Stop.";
+					illegalPlay.setText(iP);
 					return false;
 				}
 				if (getCardType(selectedCard) == STOP && getCardType(underCard) == HAZARD) {
+					iP = "Cannot place a Stop onto a Hazard.";
+					illegalPlay.setText(iP);
 					return false;
 				}
 				
@@ -495,11 +507,15 @@ public class Screen1 {
 						if (selectedCard == CardName.MILE_25 || selectedCard == CardName.MILE_50) {
 							return true;
 						}
+						iP = "Cannot place a Milage card larger than 50 with a Speed Limit card in effect.";
+						illegalPlay.setText(iP);
 						return false; //Speed Limit in effect
 					}
 					return true; //No Speed Limit
 				}
 			} else if (onto == compMileage) { //Playing onto computer's distance
+				iP = "Cannot place a card onto the opponents distance pile.";
+				illegalPlay.setText(iP);
 				return false;
 			}
 			//enter conditions based on getCardType and where source is
