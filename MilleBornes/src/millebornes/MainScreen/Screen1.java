@@ -144,6 +144,14 @@ public class Screen1 {
 		compBattle.setTransferHandler(new ImageTransferer());
 		compSpeed.setTransferHandler(new ImageTransferer());
 		compMileage.setTransferHandler(new ImageTransferer());
+		playerSafety1.setTransferHandler(new ImageTransferer());
+		playerSafety2.setTransferHandler(new ImageTransferer());
+		playerSafety3.setTransferHandler(new ImageTransferer());
+		playerSafety4.setTransferHandler(new ImageTransferer());
+		compSafety1.setTransferHandler(new ImageTransferer());
+		compSafety2.setTransferHandler(new ImageTransferer());
+		compSafety3.setTransferHandler(new ImageTransferer());
+		compSafety4.setTransferHandler(new ImageTransferer());
 		playerRunCards.add(playerBattle);
 		playerRunCards.add(playerSpeed);
 		playerRunCards.add(playerMileage);
@@ -492,6 +500,22 @@ public class Screen1 {
 					return true; //No Speed Limit
 				}
 			} else if (onto == compMileage) { //Playing onto computer's distance
+				return false;
+			} else if (onto == playerSafety1) {
+				if (selectedCard == CardName.RIGHT_OF_WAY)
+					return true;
+				return false;
+			} else if (onto == playerSafety2) {
+				if (selectedCard == CardName.DRIVING_ACE)
+					return true;
+				return false;
+			} else if (onto == playerSafety3) {
+				if (selectedCard == CardName.EXTRA_TANK)
+					return true;
+				return false;
+			} else if (onto == playerSafety4) {
+				if (selectedCard == CardName.PUNCTURE_PROOF)
+					return true;
 				return false;
 			}
 			//enter conditions based on getCardType and where source is
