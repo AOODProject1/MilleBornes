@@ -572,7 +572,7 @@ public class Screen1 {
 			return result;
 		}
 	}
-	private static final int HAZARD=0,DISTANCE=1,REMEDY=2,SAFETY=3,SPEEDLIM=4,ROLL=5,STOP=6,ENDSPEEDLIM=7,BLANK=8;
+	private static final int HAZARD=0,REMEDY=1,DISTANCE=2,SAFETY=3,SPEEDLIM=4,ENDSPEEDLIM=5,STOP=6,ROLL=7,BLANK=8;
 	private static int getCardType(CardName a) {
 		switch (a) {
 		case ACCIDENT:
