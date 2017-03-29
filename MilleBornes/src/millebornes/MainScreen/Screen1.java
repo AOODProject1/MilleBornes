@@ -560,12 +560,20 @@ public class Screen1 {
 			int[] compPlay = compPlayer.getBestCard(comp, hazardComp, compSafeties, compDistance, limitComp, hazardPlayer, playerSafeties, playerDistance, limitPlayer);
 			Card toPlay = comp[compPlay[0]];
 			switch (compPlay[1]) {
-			case Constants.OPPOSEBATTLE:
-			case Constants.OPPOSELIMIT:
-			case Constants.OWNBATTLE:
-			case Constants.OWNDIST:
-			case Constants.OWNLIMIT:
+			case Constants.OPPOSEBATTLE:playerBattle.setCardName(toPlay.getName());break;
+			case Constants.OPPOSELIMIT:playerSpeed.setCardName(toPlay.getName());break;
+			case Constants.OWNBATTLE:compBattle.setCardName(toPlay.getName());break;
+			case Constants.OWNDIST:compMileage.setCardName(toPlay.getName());break;
+			case Constants.OWNLIMIT:compSpeed.setCardName(toPlay.getName());break;
 			case Constants.OWNSAFETY:
+				switch (toPlay.getName()) {
+				case RIGHT_OF_WAY:
+				case PUNCTURE_PROOF:
+				case EXTRA_TANK:
+				case DRIVING_ACE:
+				default:
+					break;
+				}
 			case Constants.DISCARD:
 				default:
 			}
