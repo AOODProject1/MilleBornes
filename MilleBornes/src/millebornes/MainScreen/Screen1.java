@@ -441,12 +441,18 @@ public class Screen1 {
 			//INSERT CONDITIONS HERE ------------
 			if (onto == playerBattle) { //Playing onto player's battle pile
 				if (getCardType(selectedCard) == REMEDY && getCardType(underCard)==HAZARD) { //Countering Hazard
+					iP = "";
+					illegalPlay.setText(iP);
 					return true;
 				}
 				if (getCardType(selectedCard) == ROLL && getCardType(underCard) == REMEDY) { //Playing Roll after a remedy
+					iP = "";
+					illegalPlay.setText(iP);
 					return true;
 				}
 				if (getCardType(selectedCard) == ROLL && getCardType(underCard) == BLANK) {
+					iP = "";
+					illegalPlay.setText(iP);
 					return true;
 				}
 			} else if (onto == compBattle){ //Playing onto computer's Battle Pile
@@ -473,44 +479,66 @@ public class Screen1 {
 				}
 				
 				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == ROLL) {
+					iP = "";
+					illegalPlay.setText(iP);
 					return true;
 				}
 				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == REMEDY) {
+					iP = "";
+					illegalPlay.setText(iP);
 					return true;
 				}
 				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == BLANK) {
+					iP = "";
+					illegalPlay.setText(iP);
 					return true;
 				}
 				if (getCardType(selectedCard) == STOP && getCardType(underCard) == ROLL) {
+					iP = "";
+					illegalPlay.setText(iP);
 					return true;
 				}
 				if (getCardType(selectedCard) == STOP && getCardType(underCard) == REMEDY) {
+					iP = "";
+					illegalPlay.setText(iP);
 					return true;
 				}
 				if (getCardType(selectedCard) == STOP && getCardType(underCard) == BLANK) {
+					iP = "";
+					illegalPlay.setText(iP);
 					return true;
 				}
 			} else if (onto == playerSpeed) { //Playing on own Speed Limit Pile
 				if (getCardType(selectedCard) == ENDSPEEDLIM && getCardType(underCard) == SPEEDLIM) { //Ending a speed limit
+					iP = "";
+					illegalPlay.setText(iP);
 					return true;
 				}
 			} else if (onto == compSpeed) { //Playing on Computer's speed pile
 				if (getCardType(selectedCard) == SPEEDLIM && getCardType(underCard) == ENDSPEEDLIM) {
+					iP = "";
+					illegalPlay.setText(iP);
 					return true;
 				}
 				if (getCardType(selectedCard) == SPEEDLIM && getCardType(underCard) == BLANK) {
+					iP = "";
+					illegalPlay.setText(iP);
 					return true;
 				}
 			} else if (onto == playerMileage) { //Playing on own distance
 				if (getCardType(selectedCard) == DISTANCE && hazardPlayer.getName() == CardName.ROLL) {
 					if (limitPlayer.getName() == CardName.SPEED_LIMIT) {
 						if (selectedCard == CardName.MILE_25 || selectedCard == CardName.MILE_50) {
+							iP = "";
+							illegalPlay.setText(iP);
 							return true;
 						}
 						iP = "Cannot place a Milage card larger than 50 with a Speed Limit card in effect.";
 						illegalPlay.setText(iP);
 						return false; //Speed Limit in effect
 					}
+					iP = "";
+					illegalPlay.setText(iP);
 					return true; //No Speed Limit
 				}
 			} else if (onto == compMileage) { //Playing onto computer's distance
@@ -550,6 +578,11 @@ public class Screen1 {
 				compMileage.setCardName(c);
 				mileageComp = Card.getCardFromName(c);
 				compDistance += ((MovementCard)mileageComp).getDistance();
+			}
+			for (int i = 0; i < player.length; i++){
+				if (player(i) ){
+					
+				}
 			}
 			int[] compPlay = compPlayer.getBestCard(comp, hazardComp, compSafeties, compDistance, limitComp, hazardPlayer, playerSafeties, playerDistance, limitPlayer);
 			Card toPlay = comp[compPlay[0]];
