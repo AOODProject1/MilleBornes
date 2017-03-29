@@ -110,7 +110,7 @@ public class Screen1 {
 		JPanel compPaneSafeties = new JPanel();//large panel with all the comp safety cards
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		playerPaneSafeties.setBounds((int)screenSize.getWidth() - 100, 0, 100, 1136);
-		compPaneSafeties.setBounds(0, 0, 100, 1136);;
+		compPaneSafeties.setBounds(0, 0, 100, 1136);
 		paneNonSafeties = new JPanel();
 		playerCards = new JPanel();
 		deckCards = new JPanel();
@@ -132,6 +132,7 @@ public class Screen1 {
 		compSafety3 = new CardLabel(CardName.DEFAULT);
 		compSafety4 = new CardLabel(CardName.DEFAULT);
 		CardLabel key = new CardLabel(CardName.KEY_CARD);
+		deckLabel = new DeckLabel();
 		JLabel compSaftiesName = new JLabel("Computer Safeties");
 		JLabel playerSaftiesName = new JLabel("Player Safeties");
 		playerSaftiesName.setHorizontalAlignment(SwingConstants.CENTER);
@@ -300,7 +301,7 @@ public class Screen1 {
 	private static void close() {
 		int confirm = JOptionPane.showConfirmDialog(f, "Are you sure you want to quit?", "Confirm Quit",
 				JOptionPane.YES_NO_OPTION);
-		if (confirm == JOptionPane.YES_OPTION) // person doesn't want to leave
+		if (confirm == JOptionPane.YES_OPTION)
 			System.exit(0);
 	}
 	private static void init() {
@@ -389,21 +390,23 @@ public class Screen1 {
 			player[c] = deck.remove(0);
 			if (playerCardGraphics[c]==null) {
 				playerCardGraphics[c] = new CardLabel((player[c].getName()));
+				playerCardGraphics[c].setTransferHandler(new ImageTransferer());
+				playerCardGraphics[c].addMouseListener(new MouseAdapter() {
+					public void mousePressed(MouseEvent e) {
+						CardLabel source = (CardLabel)(e.getSource());
+						source.getTransferHandler().exportAsDrag(source, e, TransferHandler.COPY);
+					}
+				});
 			} else {
 				playerCardGraphics[c].setCardName(player[c].getName());
 			}
-			playerCardGraphics[c].setTransferHandler(new ImageTransferer());
-			playerCardGraphics[c].addMouseListener(new MouseAdapter() {
-				public void mousePressed(MouseEvent e) {
-					CardLabel source = (CardLabel)(e.getSource());
-					source.getTransferHandler().exportAsDrag(source, e, TransferHandler.COPY);
-				}
-			});
-			compCardGraphics[c] = new CardLabel();
+			if (compCardGraphics[c]==null)
+				compCardGraphics[c] = new CardLabel();
+			compCardGraphics[c].setCardToBack();
 			playerCards.add(playerCardGraphics[c]);
 			compCards.add(compCardGraphics[c]);
-			deckLabel = new DeckLabel(deck);
 		}
+		deckLabel.setDeck(deck);
 		playerCards.revalidate();
 		playerCards.repaint();
 		compCards.revalidate();
@@ -424,7 +427,7 @@ public class Screen1 {
 		}
 		@Override
 		public void exportAsDrag(JComponent source, InputEvent e, int action) {
-			super.exportAsDrag(source,e,action);
+			super.exportAsDrag(source, e, action);
 			ImageTransferer.source = (CardLabel)source; //exportAsDrag is only called once per dnd operation
 		}
 		@Override
@@ -435,6 +438,10 @@ public class Screen1 {
 			CardName selectedCard = source.getCardName(); //Name of card being dragged
 			CardName underCard  = onto.getCardName(); //Name of card being dragged onto
 			//INSERT CONDITIONS HERE ------------
+			/*if (onto.getParent() == playerCards //If in player's hand 
+					&& onto.getCardName() == CardName.DEFAULT  //Player's hand's slot is empty
+					&& source.getParent() == null) //Not an actual cardLabel
+				return true;*/
 			if (onto == playerBattle) { //Playing onto player's battle pile
 				if (getCardType(selectedCard) == REMEDY && getCardType(underCard)==HAZARD) { //Countering Hazard
 					return true;
@@ -527,6 +534,7 @@ public class Screen1 {
 			CardLabel dest = (CardLabel)support.getComponent();
 			boolean result = super.importData(support);
 			CardName c = source.getCardName();
+			source.setCardName(CardName.DEFAULT);
 			if (dest == playerBattle) {
 				playerBattle.setCardName(c);
 				hazardPlayer = Card.getCardFromName(c);
