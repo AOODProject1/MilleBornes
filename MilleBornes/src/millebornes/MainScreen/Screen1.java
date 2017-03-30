@@ -557,6 +557,8 @@ public class Screen1 {
 				mileageComp = Card.getCardFromName(c);
 				compDistance += ((MovementCard)mileageComp).getDistance();
 			}
+			if (compCardToReplace != -1) 
+				comp[compCardToReplace] = deckLabel.getTopCard();
 			int[] compPlay = compPlayer.getBestCard(comp, hazardComp, compSafeties, compDistance, limitComp, hazardPlayer, playerSafeties, playerDistance, limitPlayer);
 			Card toPlay = comp[compPlay[0]];
 			switch (compPlay[1]) {
@@ -567,21 +569,31 @@ public class Screen1 {
 			case Constants.OWNLIMIT:compSpeed.setCardName(toPlay.getName());break;
 			case Constants.OWNSAFETY:
 				switch (toPlay.getName()) {
-				case RIGHT_OF_WAY:
-				case PUNCTURE_PROOF:
-				case EXTRA_TANK:
-				case DRIVING_ACE:
+				case RIGHT_OF_WAY:compSafety1.setCardName(CardName.RIGHT_OF_WAY);break;
+				case DRIVING_ACE:compSafety2.setCardName(CardName.DRIVING_ACE);break;
+				case EXTRA_TANK:compSafety3.setCardName(CardName.EXTRA_TANK);break;
+				case PUNCTURE_PROOF:compSafety4.setCardName(CardName.PUNCTURE_PROOF);break;
 				default:
 					break;
 				}
 			case Constants.DISCARD:
 				default:
 			}
+			//get rid of toPlay
+			compCardToReplace = compPlay[0];
+			comp[compPlay[0]] = null;
+			//replace player's missing card (begin player turn)
+			for (CardLabel x : playerCardGraphics) {
+				if (x.getCardName() == CardName.DEFAULT) {
+					x.setCardName(deckLabel.getTopCard().getName());
+				}
+			}
 			return result;
 		}
 	}
-	private static final int HAZARD=0,REMEDY=1,DISTANCE=2,SAFETY=3,SPEEDLIM=4,ENDSPEEDLIM=5,STOP=6,ROLL=7,BLANK=8;
-	private static int getCardType(CardName a) {
+	private static int compCardToReplace = -1;
+	public static final int HAZARD=0,REMEDY=1,DISTANCE=2,SAFETY=3,SPEEDLIM=4,ENDSPEEDLIM=5,STOP=6,ROLL=7,BLANK=8;
+	public static int getCardType(CardName a) {
 		switch (a) {
 		case ACCIDENT:
 		case FLAT_TIRE:
