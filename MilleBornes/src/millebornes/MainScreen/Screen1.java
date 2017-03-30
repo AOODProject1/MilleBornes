@@ -95,9 +95,10 @@ public class Screen1 {
 	private static Card mileageComp;
 	private static Integer playerDistance=0;
 	private static Integer compDistance=0;
-	private static  ArrayList<Card>deck;
-	private static  ArrayList<Card>discard;
+	private static ArrayList<Card>deck;
+	private static ArrayList<Card>discard;
 	private static DeckLabel deckLabel;
+	private static CardLabel discardLabel;
 	public static void main (String[] args){
 		compPlayer = new DistanceAI();
 		show("Default");
@@ -142,6 +143,7 @@ public class Screen1 {
 		compSafety4 = new CardLabel(CardName.DEFAULT);
 		CardLabel key = new CardLabel(CardName.KEY_CARD);
 		deckLabel = new DeckLabel();
+		discardLabel = new CardLabel(CardName.DEFAULT);
 		JLabel compSaftiesName = new JLabel("Computer Safeties");
 		JLabel playerSaftiesName = new JLabel("Player Safeties");
 		playerSaftiesName.setHorizontalAlignment(SwingConstants.CENTER);
@@ -162,6 +164,7 @@ public class Screen1 {
 		compSafety2.setTransferHandler(new ImageTransferer());
 		compSafety3.setTransferHandler(new ImageTransferer());
 		compSafety4.setTransferHandler(new ImageTransferer());
+		discardLabel.setTransferHandler(new ImageTransferer());
 		playerRunCards.add(playerBattle);
 		playerRunCards.add(playerSpeed);
 		playerRunCards.add(playerMileage);
@@ -182,7 +185,7 @@ public class Screen1 {
 		compPaneSafeties.add(compSafety4);
 		deckCards.add(key);
 		deckCards.add(deckLabel);
-		deckCards.add(new CardLabel(CardName.DEFAULT));
+		deckCards.add(discardLabel);
 		deckCards.add(systemText);
 		playerPaneSafeties.setLayout(new GridLayout(5, 1));
 		compPaneSafeties.setLayout(new GridLayout(5, 1));
@@ -576,6 +579,8 @@ public class Screen1 {
 				if (selectedCard == CardName.PUNCTURE_PROOF)
 					return true;
 				return false;
+			} else if (onto == discardLabel) {
+				return true;
 			}
 			//enter conditions based on getCardType and where source is
 			//END CONDITION INSERTION ------------
@@ -628,6 +633,8 @@ public class Screen1 {
 						systemText.setText(sT);
 					}
 				}
+			} else if (dest == discardLabel) {
+				discardLabel.setCardName(c);
 			}
 			/*for (int i = 0; i < player.length; i++){
 				if (player[i].getCardType(player[i]) == HAZARD){
@@ -655,7 +662,7 @@ public class Screen1 {
 				default:
 					break;
 				}break;
-			case Constants.DISCARD:
+			case Constants.DISCARD:discardLabel.setCardName(toPlay.getName());
 				default:
 			}
 			//get rid of toPlay
