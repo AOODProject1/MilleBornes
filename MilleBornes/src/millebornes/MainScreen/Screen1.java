@@ -116,7 +116,7 @@ public class Screen1 {
 		JPanel compPaneSafeties = new JPanel();//large panel with all the comp safety cards
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		playerPaneSafeties.setBounds((int)screenSize.getWidth() - 100, 0, 100, 1136);
-		compPaneSafeties.setBounds(0, 0, 100, 1136);;
+		compPaneSafeties.setBounds(0, 0, 100, 1136);
 		systemText = new JLabel();
 		playerTotalDistance = new JLabel();
 		compTotalDistance = new JLabel();
@@ -141,6 +141,7 @@ public class Screen1 {
 		compSafety3 = new CardLabel(CardName.DEFAULT);
 		compSafety4 = new CardLabel(CardName.DEFAULT);
 		CardLabel key = new CardLabel(CardName.KEY_CARD);
+		deckLabel = new DeckLabel();
 		JLabel compSaftiesName = new JLabel("Computer Safeties");
 		JLabel playerSaftiesName = new JLabel("Player Safeties");
 		playerSaftiesName.setHorizontalAlignment(SwingConstants.CENTER);
@@ -153,6 +154,14 @@ public class Screen1 {
 		compBattle.setTransferHandler(new ImageTransferer());
 		compSpeed.setTransferHandler(new ImageTransferer());
 		compMileage.setTransferHandler(new ImageTransferer());
+		playerSafety1.setTransferHandler(new ImageTransferer());
+		playerSafety2.setTransferHandler(new ImageTransferer());
+		playerSafety3.setTransferHandler(new ImageTransferer());
+		playerSafety4.setTransferHandler(new ImageTransferer());
+		compSafety1.setTransferHandler(new ImageTransferer());
+		compSafety2.setTransferHandler(new ImageTransferer());
+		compSafety3.setTransferHandler(new ImageTransferer());
+		compSafety4.setTransferHandler(new ImageTransferer());
 		playerRunCards.add(playerBattle);
 		playerRunCards.add(playerSpeed);
 		playerRunCards.add(playerMileage);
@@ -304,7 +313,7 @@ public class Screen1 {
 	private static void close() {
 		int confirm = JOptionPane.showConfirmDialog(f, "Are you sure you want to quit?", "Confirm Quit",
 				JOptionPane.YES_NO_OPTION);
-		if (confirm == JOptionPane.YES_OPTION) // person doesn't want to leave
+		if (confirm == JOptionPane.YES_OPTION)
 			System.exit(0);
 	}
 	private static void init() {
@@ -393,21 +402,23 @@ public class Screen1 {
 			player[c] = deck.remove(0);
 			if (playerCardGraphics[c]==null) {
 				playerCardGraphics[c] = new CardLabel((player[c].getName()));
+				playerCardGraphics[c].setTransferHandler(new ImageTransferer());
+				playerCardGraphics[c].addMouseListener(new MouseAdapter() {
+					public void mousePressed(MouseEvent e) {
+						CardLabel source = (CardLabel)(e.getSource());
+						source.getTransferHandler().exportAsDrag(source, e, TransferHandler.COPY);
+					}
+				});
 			} else {
 				playerCardGraphics[c].setCardName(player[c].getName());
 			}
-			playerCardGraphics[c].setTransferHandler(new ImageTransferer());
-			playerCardGraphics[c].addMouseListener(new MouseAdapter() {
-				public void mousePressed(MouseEvent e) {
-					CardLabel source = (CardLabel)(e.getSource());
-					source.getTransferHandler().exportAsDrag(source, e, TransferHandler.COPY);
-				}
-			});
-			compCardGraphics[c] = new CardLabel();
+			if (compCardGraphics[c]==null)
+				compCardGraphics[c] = new CardLabel();
+			compCardGraphics[c].setCardToBack();
 			playerCards.add(playerCardGraphics[c]);
 			compCards.add(compCardGraphics[c]);
-			deckLabel = new DeckLabel(deck);
 		}
+		deckLabel.setDeck(deck);
 		playerCards.revalidate();
 		playerCards.repaint();
 		compCards.revalidate();
@@ -428,7 +439,7 @@ public class Screen1 {
 		}
 		@Override
 		public void exportAsDrag(JComponent source, InputEvent e, int action) {
-			super.exportAsDrag(source,e,action);
+			super.exportAsDrag(source, e, action);
 			ImageTransferer.source = (CardLabel)source; //exportAsDrag is only called once per dnd operation
 		}
 		@Override
@@ -439,6 +450,10 @@ public class Screen1 {
 			CardName selectedCard = source.getCardName(); //Name of card being dragged
 			CardName underCard  = onto.getCardName(); //Name of card being dragged onto
 			//INSERT CONDITIONS HERE ------------
+			/*if (onto.getParent() == playerCards //If in player's hand 
+					&& onto.getCardName() == CardName.DEFAULT  //Player's hand's slot is empty
+					&& source.getParent() == null) //Not an actual cardLabel
+				return true;*/
 			if (onto == playerBattle) { //Playing onto player's battle pile
 				if (getCardType(selectedCard) == REMEDY && getCardType(underCard)==HAZARD) { //Countering Hazard
 					sT = "";
@@ -545,6 +560,22 @@ public class Screen1 {
 				sT = "Cannot place a card onto the opponents distance pile.";
 				systemText.setText(sT);
 				return false;
+			} else if (onto == playerSafety1) {
+				if (selectedCard == CardName.RIGHT_OF_WAY)
+					return true;
+				return false;
+			} else if (onto == playerSafety2) {
+				if (selectedCard == CardName.DRIVING_ACE)
+					return true;
+				return false;
+			} else if (onto == playerSafety3) {
+				if (selectedCard == CardName.EXTRA_TANK)
+					return true;
+				return false;
+			} else if (onto == playerSafety4) {
+				if (selectedCard == CardName.PUNCTURE_PROOF)
+					return true;
+				return false;
 			}
 			//enter conditions based on getCardType and where source is
 			//END CONDITION INSERTION ------------
@@ -555,6 +586,7 @@ public class Screen1 {
 			CardLabel dest = (CardLabel)support.getComponent();
 			boolean result = super.importData(support);
 			CardName c = source.getCardName();
+			source.setCardName(CardName.DEFAULT);
 			if (dest == playerBattle) {
 				playerBattle.setCardName(c);
 				hazardPlayer = Card.getCardFromName(c);
@@ -603,23 +635,44 @@ public class Screen1 {
 				}
 			}
 			*/
+			if (compCardToReplace != -1) 
+				comp[compCardToReplace] = deckLabel.getTopCard();
 			int[] compPlay = compPlayer.getBestCard(comp, hazardComp, compSafeties, compDistance, limitComp, hazardPlayer, playerSafeties, playerDistance, limitPlayer);
 			Card toPlay = comp[compPlay[0]];
 			switch (compPlay[1]) {
-			case Constants.OPPOSEBATTLE:
-			case Constants.OPPOSELIMIT:
-			case Constants.OWNBATTLE:
-			case Constants.OWNDIST:
-			case Constants.OWNLIMIT:
+			case Constants.OPPOSEBATTLE:playerBattle.setCardName(toPlay.getName());break;
+			case Constants.OPPOSELIMIT:playerSpeed.setCardName(toPlay.getName());break;
+			case Constants.OWNBATTLE:compBattle.setCardName(toPlay.getName());break;
+			case Constants.OWNDIST:compMileage.setCardName(toPlay.getName());break;
+			case Constants.OWNLIMIT:compSpeed.setCardName(toPlay.getName());break;
 			case Constants.OWNSAFETY:
+				switch (toPlay.getName()) {
+				case RIGHT_OF_WAY:compSafety1.setCardName(CardName.RIGHT_OF_WAY);break;
+				case DRIVING_ACE:compSafety2.setCardName(CardName.DRIVING_ACE);break;
+				case EXTRA_TANK:compSafety3.setCardName(CardName.EXTRA_TANK);break;
+				case PUNCTURE_PROOF:compSafety4.setCardName(CardName.PUNCTURE_PROOF);break;
+
+				default:
+					break;
+				}
 			case Constants.DISCARD:
 				default:
+			}
+			//get rid of toPlay
+			compCardToReplace = compPlay[0];
+			comp[compPlay[0]] = null;
+			//replace player's missing card (begin player turn)
+			for (CardLabel x : playerCardGraphics) {
+				if (x.getCardName() == CardName.DEFAULT) {
+					x.setCardName(deckLabel.getTopCard().getName());
+				}
 			}
 			return result;
 		}
 	}
-	private static final int HAZARD=0,REMEDY=1,DISTANCE=2,SAFETY=3,SPEEDLIM=4,ENDSPEEDLIM=5,STOP=6,ROLL=7,BLANK=8;
-	private static int getCardType(CardName a) {
+	private static int compCardToReplace = -1;
+	public static final int HAZARD=0,REMEDY=1,DISTANCE=2,SAFETY=3,SPEEDLIM=4,ENDSPEEDLIM=5,STOP=6,ROLL=7,BLANK=8;
+	public static int getCardType(CardName a) {
 		switch (a) {
 		case ACCIDENT:
 		case FLAT_TIRE:
