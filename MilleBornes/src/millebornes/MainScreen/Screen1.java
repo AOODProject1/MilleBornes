@@ -48,7 +48,7 @@ import millebornes.card.SpeedCard;
 import millebornes.util.CardName;
 import millebornes.util.Constants;
 import millebornes.util.ImageGrab;
-//http://www.codex99.com/design/images/mille/cards_us_1960_lg.jpg
+
 public class Screen1 {
 	static JFrame f;
 	static Random r = new Random();
@@ -61,6 +61,12 @@ public class Screen1 {
 	static JPanel compRunCards; //"
 	static CardLabel playerCardGraphics[] = new CardLabel[7];
 	static CardLabel compCardGraphics[] = new CardLabel[7];
+	private static JLabel systemText;
+	private static String sT;
+	private static JLabel playerTotalDistance;
+	private static String pTD;
+	private static JLabel compTotalDistance;
+	private static String cTD;
 	private static CardLabel playerBattle;
 	private static CardLabel playerSpeed;
 	private static CardLabel playerMileage;
@@ -111,6 +117,9 @@ public class Screen1 {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		playerPaneSafeties.setBounds((int)screenSize.getWidth() - 100, 0, 100, 1136);
 		compPaneSafeties.setBounds(0, 0, 100, 1136);
+		systemText = new JLabel();
+		playerTotalDistance = new JLabel();
+		compTotalDistance = new JLabel();
 		paneNonSafeties = new JPanel();
 		playerCards = new JPanel();
 		deckCards = new JPanel();
@@ -156,9 +165,11 @@ public class Screen1 {
 		playerRunCards.add(playerBattle);
 		playerRunCards.add(playerSpeed);
 		playerRunCards.add(playerMileage);
+		playerRunCards.add(playerTotalDistance);
 		compRunCards.add(compBattle);
 		compRunCards.add(compSpeed);
 		compRunCards.add(compMileage);
+		compRunCards.add(compTotalDistance);
 		playerPaneSafeties.add(playerSaftiesName);
 		playerPaneSafeties.add(playerSafety1);
 		playerPaneSafeties.add(playerSafety2);
@@ -172,6 +183,7 @@ public class Screen1 {
 		deckCards.add(key);
 		deckCards.add(deckLabel);
 		deckCards.add(new CardLabel(CardName.DEFAULT));
+		deckCards.add(systemText);
 		playerPaneSafeties.setLayout(new GridLayout(5, 1));
 		compPaneSafeties.setLayout(new GridLayout(5, 1));
 		paneNonSafeties.setLayout(new BoxLayout(paneNonSafeties, BoxLayout.Y_AXIS));
@@ -444,69 +456,109 @@ public class Screen1 {
 				return true;*/
 			if (onto == playerBattle) { //Playing onto player's battle pile
 				if (getCardType(selectedCard) == REMEDY && getCardType(underCard)==HAZARD) { //Countering Hazard
+					sT = "";
+					systemText.setText(sT);
 					return true;
 				}
 				if (getCardType(selectedCard) == ROLL && getCardType(underCard) == REMEDY) { //Playing Roll after a remedy
+					sT = "";
+					systemText.setText(sT);
 					return true;
 				}
 				if (getCardType(selectedCard) == ROLL && getCardType(underCard) == BLANK) {
+					sT = "";
+					systemText.setText(sT);
 					return true;
 				}
 			} else if (onto == compBattle){ //Playing onto computer's Battle Pile
 				//Shortcutting (no hazard/stop can be played on another)
 				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == HAZARD) {
+					sT = "Cannot place a Hazard onto another Hazard.";
+					systemText.setText(sT);
 					return false;
 				}
 				if (getCardType(selectedCard) == STOP && getCardType(underCard) == STOP) {
+					sT = "Cannot place a Stop onto another Stop.";
+					systemText.setText(sT);
 					return false;
 				}
 				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == STOP) {
+					sT = "Cannot place a Hazard onto a Stop.";
+					systemText.setText(sT);
 					return false;
 				}
 				if (getCardType(selectedCard) == STOP && getCardType(underCard) == HAZARD) {
+					sT = "Cannot place a Stop onto a Hazard.";
+					systemText.setText(sT);
 					return false;
 				}
 				
 				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == ROLL) {
+					sT = "";
+					systemText.setText(sT);
 					return true;
 				}
 				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == REMEDY) {
+					sT = "";
+					systemText.setText(sT);
 					return true;
 				}
 				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == BLANK) {
+					sT = "";
+					systemText.setText(sT);
 					return true;
 				}
 				if (getCardType(selectedCard) == STOP && getCardType(underCard) == ROLL) {
+					sT = "";
+					systemText.setText(sT);
 					return true;
 				}
 				if (getCardType(selectedCard) == STOP && getCardType(underCard) == REMEDY) {
+					sT = "";
+					systemText.setText(sT);
 					return true;
 				}
 				if (getCardType(selectedCard) == STOP && getCardType(underCard) == BLANK) {
+					sT = "";
+					systemText.setText(sT);
 					return true;
 				}
 			} else if (onto == playerSpeed) { //Playing on own Speed Limit Pile
 				if (getCardType(selectedCard) == ENDSPEEDLIM && getCardType(underCard) == SPEEDLIM) { //Ending a speed limit
+					sT = "";
+					systemText.setText(sT);
 					return true;
 				}
 			} else if (onto == compSpeed) { //Playing on Computer's speed pile
 				if (getCardType(selectedCard) == SPEEDLIM && getCardType(underCard) == ENDSPEEDLIM) {
+					sT = "";
+					systemText.setText(sT);
 					return true;
 				}
 				if (getCardType(selectedCard) == SPEEDLIM && getCardType(underCard) == BLANK) {
+					sT = "";
+					systemText.setText(sT);
 					return true;
 				}
 			} else if (onto == playerMileage) { //Playing on own distance
 				if (getCardType(selectedCard) == DISTANCE && hazardPlayer.getName() == CardName.ROLL) {
 					if (limitPlayer.getName() == CardName.SPEED_LIMIT) {
 						if (selectedCard == CardName.MILE_25 || selectedCard == CardName.MILE_50) {
+							sT = "";
+							systemText.setText(sT);
 							return true;
 						}
+						sT = "Cannot place a Milage card larger than 50 with a Speed Limit card in effect.";
+						systemText.setText(sT);
 						return false; //Speed Limit in effect
 					}
+					sT = "";
+					systemText.setText(sT);
 					return true; //No Speed Limit
 				}
 			} else if (onto == compMileage) { //Playing onto computer's distance
+				sT = "Cannot place a card onto the opponents distance pile.";
+				systemText.setText(sT);
 				return false;
 			} else if (onto == playerSafety1) {
 				if (selectedCard == CardName.RIGHT_OF_WAY)
@@ -544,7 +596,18 @@ public class Screen1 {
 			} else if (dest == playerMileage) {
 				playerMileage.setCardName(c);
 				mileagePlayer = Card.getCardFromName(c);
-				playerDistance += ((MovementCard)mileagePlayer).getDistance();
+				if (playerDistance + ((MovementCard)mileagePlayer).getDistance() <= 1000){
+					playerDistance += ((MovementCard)mileagePlayer).getDistance();
+					if (playerDistance!= 1000){
+						pTD = playerDistance + "Miles";
+						playerTotalDistance.setText(pTD);
+					} else if (compDistance == 1000){
+						pTD = playerDistance + "Miles";
+						playerTotalDistance.setText(pTD);
+						sT = "Player has won!";
+						systemText.setText(sT);
+					}
+				}
 			} else if (dest == compBattle) {
 				compBattle.setCardName(c);
 				hazardComp = Card.getCardFromName(c);
@@ -555,8 +618,23 @@ public class Screen1 {
 				//Shouldn't be the case, but included for completeness' sake
 				compMileage.setCardName(c);
 				mileageComp = Card.getCardFromName(c);
-				compDistance += ((MovementCard)mileageComp).getDistance();
+				if (compDistance + ((MovementCard)mileageComp).getDistance() <= 1000){
+					compDistance += ((MovementCard)mileageComp).getDistance();
+					if (compDistance != 1000){
+						cTD = compDistance + "Miles";
+						compTotalDistance.setText(cTD);
+					} else if (compDistance == 1000){
+						sT = "Computer has won!";
+						systemText.setText(sT);
+					}
+				}
 			}
+			/*for (int i = 0; i < player.length; i++){
+				if (player[i].getCardType(player[i]) == HAZARD){
+					
+				}
+			}
+			*/
 			if (compCardToReplace != -1) 
 				comp[compCardToReplace] = deckLabel.getTopCard();
 			int[] compPlay = compPlayer.getBestCard(comp, hazardComp, compSafeties, compDistance, limitComp, hazardPlayer, playerSafeties, playerDistance, limitPlayer);
@@ -572,7 +650,8 @@ public class Screen1 {
 				case RIGHT_OF_WAY:compSafety1.setCardName(CardName.RIGHT_OF_WAY);break;
 				case DRIVING_ACE:compSafety2.setCardName(CardName.DRIVING_ACE);break;
 				case EXTRA_TANK:compSafety3.setCardName(CardName.EXTRA_TANK);break;
-				case PUNCTURE_PROOF:compSafety4.setCardName(CardName.PUNCTURE_PROOF);break;
+				case PUNCTURE_PROOF:compSafety4.setCardName(CardName.PUNCTURE_PROOF);break;
+
 				default:
 					break;
 				}
@@ -637,4 +716,12 @@ public class Screen1 {
 			return -1;
 		}
 	}
+	/*public String win(){
+		if (playerDistance == 1000){
+			sT = "Player has won!";
+		} else if(compDistance == 1000){
+			sT = "Computer has won!";
+		}
+		return sT;
+	}*/
 }
