@@ -586,7 +586,7 @@ public class Screen1 {
 			CardLabel dest = (CardLabel)support.getComponent();
 			boolean result = super.importData(support);
 			CardName c = source.getCardName();
-			source.setCardName(CardName.DEFAULT);
+			source.setCardName(CardName.DEFAULT); //Removes card from hand
 			if (dest == playerBattle) {
 				playerBattle.setCardName(c);
 				hazardPlayer = Card.getCardFromName(c);
@@ -654,7 +654,7 @@ public class Screen1 {
 
 				default:
 					break;
-				}
+				}break;
 			case Constants.DISCARD:
 				default:
 			}

@@ -15,7 +15,7 @@ public class DistanceAI implements AI {
 	public int[] getBestCard(Card[] hand, Card compBattle, SafetyCard[] compSafeties, int compDistance,
 			SpeedCard compSpeed, Card playerBattle, SafetyCard[] playerSafeties, int playerDistance,
 			SpeedCard playerSpeed) {
-		int typeToLookFor = -1;
+		int typeToLookFor = 0;
 		CardName ttlfExtra = CardName.DEFAULT;
 		int whereToGo=0;
 		if (compBattle instanceof HazardCard) {
@@ -34,7 +34,7 @@ public class DistanceAI implements AI {
 			typeToLookFor = Screen1.ROLL;
 			whereToGo = Constants.OWNDIST;
 		}
-		int bestIndex=-1;
+		int bestIndex=0;
 		for (int i=0;i<hand.length;i++) {//find correct card based to typetolookfor
 			if (Screen1.getCardType(hand[i].getName()) == typeToLookFor){//hand[i].getClass().getSimpleName().equals(typeToLookFor.getClass().getSimpleName())) {
 					bestIndex=i;
