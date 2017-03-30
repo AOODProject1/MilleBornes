@@ -63,6 +63,8 @@ public class Screen1 {
 	static CardLabel compCardGraphics[] = new CardLabel[7];
 	private static JLabel systemText;
 	private static String sT;
+	private static JLabel winText;
+	private static String wT;
 	private static JLabel playerTotalDistance;
 	private static String pTD;
 	private static JLabel compTotalDistance;
@@ -118,6 +120,7 @@ public class Screen1 {
 		playerPaneSafeties.setBounds((int)screenSize.getWidth() - 100, 0, 100, 1136);
 		compPaneSafeties.setBounds(0, 0, 100, 1136);
 		systemText = new JLabel();
+		winText = new JLabel();
 		playerTotalDistance = new JLabel();
 		compTotalDistance = new JLabel();
 		paneNonSafeties = new JPanel();
@@ -180,6 +183,7 @@ public class Screen1 {
 		compPaneSafeties.add(compSafety2);
 		compPaneSafeties.add(compSafety3);
 		compPaneSafeties.add(compSafety4);
+		deckCards.add(winText);
 		deckCards.add(key);
 		deckCards.add(deckLabel);
 		deckCards.add(new CardLabel(CardName.DEFAULT));
@@ -586,7 +590,7 @@ public class Screen1 {
 			CardLabel dest = (CardLabel)support.getComponent();
 			boolean result = super.importData(support);
 			CardName c = source.getCardName();
-			source.setCardName(CardName.DEFAULT);
+			//source.setCardName(CardName.DEFAULT);
 			if (dest == playerBattle) {
 				playerBattle.setCardName(c);
 				hazardPlayer = Card.getCardFromName(c);
@@ -597,15 +601,16 @@ public class Screen1 {
 				playerMileage.setCardName(c);
 				mileagePlayer = Card.getCardFromName(c);
 				if (playerDistance + ((MovementCard)mileagePlayer).getDistance() <= 1000){
-					playerDistance += ((MovementCard)mileagePlayer).getDistance();
 					if (playerDistance!= 1000){
+						playerDistance += ((MovementCard)mileagePlayer).getDistance();
 						pTD = playerDistance + "Miles";
 						playerTotalDistance.setText(pTD);
-					} else if (compDistance == 1000){
+					} else if (playerDistance == 1000){
+						playerDistance += ((MovementCard)mileagePlayer).getDistance();
 						pTD = playerDistance + "Miles";
 						playerTotalDistance.setText(pTD);
-						sT = "Player has won!";
-						systemText.setText(sT);
+						wT = "Player has won!";
+						winText.setText(wT);
 					}
 				}
 			} else if (dest == compBattle) {
@@ -619,13 +624,16 @@ public class Screen1 {
 				compMileage.setCardName(c);
 				mileageComp = Card.getCardFromName(c);
 				if (compDistance + ((MovementCard)mileageComp).getDistance() <= 1000){
-					compDistance += ((MovementCard)mileageComp).getDistance();
 					if (compDistance != 1000){
+						compDistance += ((MovementCard)mileageComp).getDistance();
 						cTD = compDistance + "Miles";
 						compTotalDistance.setText(cTD);
 					} else if (compDistance == 1000){
-						sT = "Computer has won!";
-						systemText.setText(sT);
+						compDistance += ((MovementCard)mileageComp).getDistance();
+						cTD = compDistance + "Miles";
+						compTotalDistance.setText(cTD);
+						wT = "Computer has won!";
+						winText.setText(wT);
 					}
 				}
 			}
