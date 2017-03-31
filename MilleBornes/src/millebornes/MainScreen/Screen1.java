@@ -145,8 +145,12 @@ public class Screen1 {
 		compSafety4 = new CardLabel(CardName.DEFAULT);
 		CardLabel key = new CardLabel(CardName.KEY_CARD);
 		deckLabel = new DeckLabel();
-		JLabel compSaftiesName = new JLabel("Computer Safeties");
-		JLabel playerSaftiesName = new JLabel("Player Safeties");
+		JLabel compSaftiesName = new JLabel();
+		JLabel playerSaftiesName = new JLabel();
+		compSaftiesName.setText("Computer Safeties");
+		playerSaftiesName.setText("Player Safeties");
+		compSaftiesName.setBackground(Color.WHITE);
+		playerSaftiesName.setBackground(Color.WHITE);
 		playerSaftiesName.setHorizontalAlignment(SwingConstants.CENTER);
 		compSaftiesName.setHorizontalAlignment(SwingConstants.CENTER);
 		f.setLayout(new BoxLayout(f.getContentPane(),BoxLayout.LINE_AXIS));
@@ -190,6 +194,15 @@ public class Screen1 {
 		deckCards.add(systemText);
 		playerPaneSafeties.setLayout(new GridLayout(5, 1));
 		compPaneSafeties.setLayout(new GridLayout(5, 1));
+		playerCards.setBackground(Color.DARK_GRAY);
+		compCards.setBackground(Color.DARK_GRAY);
+		deckCards.setBackground(Color.DARK_GRAY);
+		playerRunCards.setBackground(Color.DARK_GRAY);
+		compRunCards.setBackground(Color.DARK_GRAY);
+		paneNonSafeties.setBackground(Color.DARK_GRAY);
+		playerPaneSafeties.setBackground(Color.DARK_GRAY);
+		compPaneSafeties.setBackground(Color.DARK_GRAY);
+		playerCards.setBackground(Color.DARK_GRAY);
 		paneNonSafeties.setLayout(new BoxLayout(paneNonSafeties, BoxLayout.Y_AXIS));
 		paneNonSafeties.add(compCards);
 		paneNonSafeties.add(compRunCards);
@@ -590,7 +603,7 @@ public class Screen1 {
 			CardLabel dest = (CardLabel)support.getComponent();
 			boolean result = super.importData(support);
 			CardName c = source.getCardName();
-			//source.setCardName(CardName.DEFAULT);
+			source.setCardName(CardName.DEFAULT);
 			if (dest == playerBattle) {
 				playerBattle.setCardName(c);
 				hazardPlayer = Card.getCardFromName(c);
@@ -601,12 +614,11 @@ public class Screen1 {
 				playerMileage.setCardName(c);
 				mileagePlayer = Card.getCardFromName(c);
 				if (playerDistance + ((MovementCard)mileagePlayer).getDistance() <= 1000){
-					if (playerDistance!= 1000){
-						playerDistance += ((MovementCard)mileagePlayer).getDistance();
+					playerDistance += ((MovementCard)mileagePlayer).getDistance();
+					if (playerDistance != 1000){
 						pTD = playerDistance + "Miles";
 						playerTotalDistance.setText(pTD);
 					} else if (playerDistance == 1000){
-						playerDistance += ((MovementCard)mileagePlayer).getDistance();
 						pTD = playerDistance + "Miles";
 						playerTotalDistance.setText(pTD);
 						wT = "Player has won!";
@@ -624,12 +636,11 @@ public class Screen1 {
 				compMileage.setCardName(c);
 				mileageComp = Card.getCardFromName(c);
 				if (compDistance + ((MovementCard)mileageComp).getDistance() <= 1000){
+					compDistance += ((MovementCard)mileageComp).getDistance();
 					if (compDistance != 1000){
-						compDistance += ((MovementCard)mileageComp).getDistance();
 						cTD = compDistance + "Miles";
 						compTotalDistance.setText(cTD);
 					} else if (compDistance == 1000){
-						compDistance += ((MovementCard)mileageComp).getDistance();
 						cTD = compDistance + "Miles";
 						compTotalDistance.setText(cTD);
 						wT = "Computer has won!";
