@@ -151,8 +151,8 @@ public class Screen1 {
 		JLabel playerSaftiesName = new JLabel("Player Safeties");
 		compSaftiesName.setText("Computer Safeties");
 		playerSaftiesName.setText("Player Safeties");
-		compSaftiesName.setBackground(Color.WHITE);
-		playerSaftiesName.setBackground(Color.WHITE);
+		compSaftiesName.setForeground(Color.white);
+		playerSaftiesName.setForeground(Color.white);
 		playerSaftiesName.setHorizontalAlignment(SwingConstants.CENTER);
 		compSaftiesName.setHorizontalAlignment(SwingConstants.CENTER);
 		f.setLayout(new BoxLayout(f.getContentPane(),BoxLayout.LINE_AXIS));
@@ -216,7 +216,6 @@ public class Screen1 {
 		compRunCards.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		playerPaneSafeties.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		compPaneSafeties.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		deckCards.setBorder(BorderFactory.createLineBorder(Color.CYAN));
 		f.pack();
 		bar.add(newGame);
 		bar.add(save);
@@ -464,6 +463,7 @@ public class Screen1 {
 		}
 		@Override
 		public boolean canImport(TransferSupport support) {
+		systemText.setForeground(Color.white);
 			if (!super.canImport(support)) return false;
 			if (!support.isDrop()) return false;
 			CardLabel onto = ((CardLabel)support.getComponent()); //Where the card is being played
@@ -622,13 +622,16 @@ public class Screen1 {
 					playerDistance += ((MovementCard)mileagePlayer).getDistance();
 					if (playerDistance != 1000){
 						pTD = playerDistance + "Miles";
+						playerTotalDistance.setForeground(Color.white);
 						playerTotalDistance.setText(pTD);
 					} else if (playerDistance == 1000){
 						pTD = playerDistance + "Miles";
+						playerTotalDistance.setForeground(Color.white);
 						playerTotalDistance.setText(pTD);
 						wT = "Player has won!";
+						winText.setForeground(Color.white);
 						winText.setText(wT);
-					}
+						}
 				}
 			} else if (dest == compBattle) {
 				compBattle.setCardName(c);
@@ -640,18 +643,6 @@ public class Screen1 {
 				//Shouldn't be the case, but included for completeness' sake
 				compMileage.setCardName(c);
 				mileageComp = Card.getCardFromName(c);
-				if (compDistance + ((MovementCard)mileageComp).getDistance() <= 1000){
-					compDistance += ((MovementCard)mileageComp).getDistance();
-					if (compDistance != 1000){
-						cTD = compDistance + "Miles";
-						compTotalDistance.setText(cTD);
-					} else if (compDistance == 1000){
-						cTD = compDistance + "Miles";
-						compTotalDistance.setText(cTD);
-						wT = "Computer has won!";
-						winText.setText(wT);
-					}
-				}
 			} else if (dest == discardLabel) {
 				discardLabel.setCardName(c);
 			}
@@ -683,6 +674,26 @@ public class Screen1 {
 				}break;
 			case Constants.DISCARD:discardLabel.setCardName(toPlay.getName());
 				default:
+			}
+			//comp win statement
+			try{
+			if (compDistance + new MovementCard(compMileage.getCardName()).getDistance() <= 1000){
+				compDistance += new MovementCard(compMileage.getCardName()).getDistance();
+				if (compDistance != 1000){
+					cTD = compDistance + "Miles";
+					compTotalDistance.setForeground(Color.white);
+					compTotalDistance.setText(cTD);
+				} else if (compDistance == 1000){
+					cTD = compDistance + "Miles";
+					compTotalDistance.setForeground(Color.white);
+					compTotalDistance.setText(cTD);
+					wT = "Computer has won!";
+					winText.setForeground(Color.white);
+					winText.setText(wT);
+				}
+			}
+			}catch(ClassCastException e){
+				
 			}
 			//get rid of toPlay
 			compCardToReplace = compPlay[0];
