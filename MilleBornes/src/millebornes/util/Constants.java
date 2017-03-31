@@ -9,5 +9,6 @@ public class Constants {
 			OWNLIMIT=2,
 			OPPOSELIMIT=3,
 			OWNDIST=4,
-			OWNSAFETY=5;
+			OWNSAFETY=5,
+			DISCARD=6;
 }
