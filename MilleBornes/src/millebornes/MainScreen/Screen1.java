@@ -644,7 +644,7 @@ public class Screen1 {
 			*/
 			if (compCardToReplace != -1) 
 				comp[compCardToReplace] = deckLabel.getTopCard();
-			int[] compPlay = compPlayer.getBestCard(comp, hazardComp, compSafeties, compDistance, limitComp, hazardPlayer, playerSafeties, playerDistance, limitPlayer);
+			int[] compPlay = compPlayer.getBestCard(comp, compBattle.getCardName(), compSafeties, compDistance, limitComp.getName(), hazardPlayer.getName(), playerSafeties, playerDistance, limitPlayer.getName());
 			Card toPlay = comp[compPlay[0]];
 			switch (compPlay[1]) {
 			case Constants.OPPOSEBATTLE:playerBattle.setCardName(toPlay.getName());break;
