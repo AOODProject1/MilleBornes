@@ -97,9 +97,10 @@ public class Screen1 {
 	private static Card mileageComp;
 	private static Integer playerDistance=0;
 	private static Integer compDistance=0;
-	private static  ArrayList<Card>deck;
-	private static  ArrayList<Card>discard;
+	private static ArrayList<Card>deck;
+	private static ArrayList<Card>discard;
 	private static DeckLabel deckLabel;
+	private static CardLabel discardLabel;
 	public static void main (String[] args){
 		compPlayer = new DistanceAI();
 		show("Default");
@@ -145,8 +146,9 @@ public class Screen1 {
 		compSafety4 = new CardLabel(CardName.DEFAULT);
 		CardLabel key = new CardLabel(CardName.KEY_CARD);
 		deckLabel = new DeckLabel();
-		JLabel compSaftiesName = new JLabel();
-		JLabel playerSaftiesName = new JLabel();
+		discardLabel = new CardLabel(CardName.DEFAULT);
+		JLabel compSaftiesName = new JLabel("Computer Safeties");
+		JLabel playerSaftiesName = new JLabel("Player Safeties");
 		compSaftiesName.setText("Computer Safeties");
 		playerSaftiesName.setText("Player Safeties");
 		compSaftiesName.setBackground(Color.WHITE);
@@ -169,6 +171,7 @@ public class Screen1 {
 		compSafety2.setTransferHandler(new ImageTransferer());
 		compSafety3.setTransferHandler(new ImageTransferer());
 		compSafety4.setTransferHandler(new ImageTransferer());
+		discardLabel.setTransferHandler(new ImageTransferer());
 		playerRunCards.add(playerBattle);
 		playerRunCards.add(playerSpeed);
 		playerRunCards.add(playerMileage);
@@ -190,7 +193,7 @@ public class Screen1 {
 		deckCards.add(winText);
 		deckCards.add(key);
 		deckCards.add(deckLabel);
-		deckCards.add(new CardLabel(CardName.DEFAULT));
+		deckCards.add(discardLabel);
 		deckCards.add(systemText);
 		playerPaneSafeties.setLayout(new GridLayout(5, 1));
 		compPaneSafeties.setLayout(new GridLayout(5, 1));
@@ -593,6 +596,8 @@ public class Screen1 {
 				if (selectedCard == CardName.PUNCTURE_PROOF)
 					return true;
 				return false;
+			} else if (onto == discardLabel) {
+				return true;
 			}
 			//enter conditions based on getCardType and where source is
 			//END CONDITION INSERTION ------------
@@ -603,7 +608,7 @@ public class Screen1 {
 			CardLabel dest = (CardLabel)support.getComponent();
 			boolean result = super.importData(support);
 			CardName c = source.getCardName();
-			source.setCardName(CardName.DEFAULT);
+			source.setCardName(CardName.DEFAULT); //Removes card from hand
 			if (dest == playerBattle) {
 				playerBattle.setCardName(c);
 				hazardPlayer = Card.getCardFromName(c);
@@ -647,6 +652,8 @@ public class Screen1 {
 						winText.setText(wT);
 					}
 				}
+			} else if (dest == discardLabel) {
+				discardLabel.setCardName(c);
 			}
 			/*for (int i = 0; i < player.length; i++){
 				if (player[i].getCardType(player[i]) == HAZARD){
@@ -656,7 +663,7 @@ public class Screen1 {
 			*/
 			if (compCardToReplace != -1) 
 				comp[compCardToReplace] = deckLabel.getTopCard();
-			int[] compPlay = compPlayer.getBestCard(comp, hazardComp, compSafeties, compDistance, limitComp, hazardPlayer, playerSafeties, playerDistance, limitPlayer);
+			int[] compPlay = compPlayer.getBestCard(comp, compBattle.getCardName(), compSafeties, compDistance, limitComp.getName(), hazardPlayer.getName(), playerSafeties, playerDistance, limitPlayer.getName());
 			Card toPlay = comp[compPlay[0]];
 			switch (compPlay[1]) {
 			case Constants.OPPOSEBATTLE:playerBattle.setCardName(toPlay.getName());break;
@@ -673,8 +680,8 @@ public class Screen1 {
 
 				default:
 					break;
-				}
-			case Constants.DISCARD:
+				}break;
+			case Constants.DISCARD:discardLabel.setCardName(toPlay.getName());
 				default:
 			}
 			//get rid of toPlay

@@ -12,34 +12,46 @@ import millebornes.util.Countercard;
 public class DistanceAI implements AI {
 
 	@Override
-	public int[] getBestCard(Card[] hand, Card compBattle, SafetyCard[] compSafeties, int compDistance,
-			SpeedCard compSpeed, Card playerBattle, SafetyCard[] playerSafeties, int playerDistance,
-			SpeedCard playerSpeed) {
+	public int[] getBestCard(Card[] hand, CardName compBattle, SafetyCard[] compSafeties, int compDistance,
+			CardName compSpeed, CardName playerBattle, SafetyCard[] playerSafeties, int playerDistance,
+			CardName playerSpeed) {
 		int typeToLookFor = -1;
 		CardName ttlfExtra = CardName.DEFAULT;
 		int whereToGo=0;
-		if (compBattle instanceof HazardCard) {
+		if (Screen1.getCardType(compBattle) == Screen1.HAZARD) {
 			typeToLookFor = Screen1.REMEDY;
-			ttlfExtra = new Countercard((HazardCard)compBattle).getRemedy().getName(); 
+			ttlfExtra = new Countercard(new HazardCard(compBattle)).getRemedy().getName(); 
 			whereToGo = Constants.OWNBATTLE;
-		} else if (compBattle instanceof RemedyCard) {
-			if (((RemedyCard)compBattle).equals(new RemedyCard(CardName.ROLL))) {
-				typeToLookFor = Screen1.DISTANCE;
-				whereToGo = Constants.OWNDIST;
-			} else {
-				typeToLookFor = Screen1.ROLL;
-				whereToGo = Constants.OWNBATTLE;
-			}
+		} else if (Screen1.getCardType(compBattle) == Screen1.REMEDY) {
+			typeToLookFor = Screen1.ROLL;
+			whereToGo = Constants.OWNBATTLE;
+		} else if (Screen1.getCardType(compBattle) == Screen1.ROLL) {
+			if (compSpeed == CardName.SPEED_LIMIT)
+				ttlfExtra = CardName.MILE_50;
+			typeToLookFor = Screen1.DISTANCE;
+			whereToGo = Constants.OWNDIST;
 		} else { //no cards on battlepile
 			typeToLookFor = Screen1.ROLL;
-			whereToGo = Constants.OWNDIST;
+			whereToGo = Constants.OWNBATTLE;
 		}
 		int bestIndex=-1;
-		for (int i=0;i<hand.length;i++) {//find correct card based to typetolookfor
-			if (Screen1.getCardType(hand[i].getName()) == typeToLookFor){//hand[i].getClass().getSimpleName().equals(typeToLookFor.getClass().getSimpleName())) {
+		if (ttlfExtra == CardName.DEFAULT) {
+			for (int i=0;i<hand.length;i++) {//find correct card based to typetolookfor
+				if (Screen1.getCardType(hand[i].getName()) == typeToLookFor){//hand[i].getClass().getSimpleName().equals(typeToLookFor.getClass().getSimpleName())) {
 					bestIndex=i;
 					break;
+				}
 			}
+		} else {
+			for (int i=0;i<hand.length;i++) {
+				if (hand[i].getName() == ttlfExtra) {
+					bestIndex=i;
+					break;
+				}
+			}
+		}
+		if (bestIndex == -1) {
+			return new int[] {0,Constants.DISCARD};
 		}
 		return new int[] {bestIndex,whereToGo};
 	}
