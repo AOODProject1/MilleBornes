@@ -63,6 +63,8 @@ public class Screen1 {
 	static CardLabel compCardGraphics[] = new CardLabel[7];
 	private static JLabel systemText;
 	private static String sT;
+	private static JLabel winText;
+	private static String wT;
 	private static JLabel playerTotalDistance;
 	private static String pTD;
 	private static JLabel compTotalDistance;
@@ -119,6 +121,7 @@ public class Screen1 {
 		playerPaneSafeties.setBounds((int)screenSize.getWidth() - 100, 0, 100, 1136);
 		compPaneSafeties.setBounds(0, 0, 100, 1136);
 		systemText = new JLabel();
+		winText = new JLabel();
 		playerTotalDistance = new JLabel();
 		compTotalDistance = new JLabel();
 		paneNonSafeties = new JPanel();
@@ -146,6 +149,10 @@ public class Screen1 {
 		discardLabel = new CardLabel(CardName.DEFAULT);
 		JLabel compSaftiesName = new JLabel("Computer Safeties");
 		JLabel playerSaftiesName = new JLabel("Player Safeties");
+		compSaftiesName.setText("Computer Safeties");
+		playerSaftiesName.setText("Player Safeties");
+		compSaftiesName.setBackground(Color.WHITE);
+		playerSaftiesName.setBackground(Color.WHITE);
 		playerSaftiesName.setHorizontalAlignment(SwingConstants.CENTER);
 		compSaftiesName.setHorizontalAlignment(SwingConstants.CENTER);
 		f.setLayout(new BoxLayout(f.getContentPane(),BoxLayout.LINE_AXIS));
@@ -183,12 +190,22 @@ public class Screen1 {
 		compPaneSafeties.add(compSafety2);
 		compPaneSafeties.add(compSafety3);
 		compPaneSafeties.add(compSafety4);
+		deckCards.add(winText);
 		deckCards.add(key);
 		deckCards.add(deckLabel);
 		deckCards.add(discardLabel);
 		deckCards.add(systemText);
 		playerPaneSafeties.setLayout(new GridLayout(5, 1));
 		compPaneSafeties.setLayout(new GridLayout(5, 1));
+		playerCards.setBackground(Color.DARK_GRAY);
+		compCards.setBackground(Color.DARK_GRAY);
+		deckCards.setBackground(Color.DARK_GRAY);
+		playerRunCards.setBackground(Color.DARK_GRAY);
+		compRunCards.setBackground(Color.DARK_GRAY);
+		paneNonSafeties.setBackground(Color.DARK_GRAY);
+		playerPaneSafeties.setBackground(Color.DARK_GRAY);
+		compPaneSafeties.setBackground(Color.DARK_GRAY);
+		playerCards.setBackground(Color.DARK_GRAY);
 		paneNonSafeties.setLayout(new BoxLayout(paneNonSafeties, BoxLayout.Y_AXIS));
 		paneNonSafeties.add(compCards);
 		paneNonSafeties.add(compRunCards);
@@ -603,14 +620,14 @@ public class Screen1 {
 				mileagePlayer = Card.getCardFromName(c);
 				if (playerDistance + ((MovementCard)mileagePlayer).getDistance() <= 1000){
 					playerDistance += ((MovementCard)mileagePlayer).getDistance();
-					if (playerDistance!= 1000){
+					if (playerDistance != 1000){
 						pTD = playerDistance + "Miles";
 						playerTotalDistance.setText(pTD);
-					} else if (compDistance == 1000){
+					} else if (playerDistance == 1000){
 						pTD = playerDistance + "Miles";
 						playerTotalDistance.setText(pTD);
-						sT = "Player has won!";
-						systemText.setText(sT);
+						wT = "Player has won!";
+						winText.setText(wT);
 					}
 				}
 			} else if (dest == compBattle) {
@@ -629,8 +646,10 @@ public class Screen1 {
 						cTD = compDistance + "Miles";
 						compTotalDistance.setText(cTD);
 					} else if (compDistance == 1000){
-						sT = "Computer has won!";
-						systemText.setText(sT);
+						cTD = compDistance + "Miles";
+						compTotalDistance.setText(cTD);
+						wT = "Computer has won!";
+						winText.setText(wT);
 					}
 				}
 			} else if (dest == discardLabel) {
