@@ -31,8 +31,13 @@ public class DistanceAI implements AI {
 			typeToLookFor = Screen1.DISTANCE;
 			whereToGo = Constants.OWNDIST;
 		} else { //no cards on battlepile
-			typeToLookFor = Screen1.ROLL;
-			whereToGo = Constants.OWNBATTLE;
+			if (compSpeed == CardName.SPEED_LIMIT) {
+				ttlfExtra = CardName.END_SPEED_LIMIT;
+				whereToGo = Constants.OWNLIMIT;
+			} else {
+				typeToLookFor = Screen1.ROLL;
+				whereToGo = Constants.OWNBATTLE;
+			}
 		}
 		int bestIndex=-1;
 		if (ttlfExtra == CardName.DEFAULT) {
@@ -40,6 +45,28 @@ public class DistanceAI implements AI {
 				if (Screen1.getCardType(hand[i].getName()) == typeToLookFor){//hand[i].getClass().getSimpleName().equals(typeToLookFor.getClass().getSimpleName())) {
 					bestIndex=i;
 					break;
+				}
+			}
+		} else if (ttlfExtra == CardName.MILE_25){
+			for (int i=0;i<hand.length;i++) {//find correct card based to typetolookfor
+				if (hand[i].getName() == CardName.MILE_25 || hand[i].getName() == CardName.MILE_50){//hand[i].getClass().getSimpleName().equals(typeToLookFor.getClass().getSimpleName())) {
+					bestIndex=i;
+					break;
+				}
+			}
+		} else if (ttlfExtra == CardName.END_SPEED_LIMIT) {
+			for (int i=0;i<hand.length;i++) {
+				if (hand[i].getName() == ttlfExtra) {
+					bestIndex=i;
+					break;
+				}
+			}
+			if (bestIndex==-1) {
+				for (int i=0;i<hand.length;i++) {
+					if (hand[i].getName() == CardName.MILE_25 || hand[i].getName() == CardName.MILE_50){//hand[i].getClass().getSimpleName().equals(typeToLookFor.getClass().getSimpleName())) {
+						bestIndex=i;
+						break;
+					}
 				}
 			}
 		} else {
@@ -51,6 +78,7 @@ public class DistanceAI implements AI {
 			}
 		}
 		if (bestIndex == -1) {
+			
 			return new int[] {0,Constants.DISCARD};
 		}
 		return new int[] {bestIndex,whereToGo};
