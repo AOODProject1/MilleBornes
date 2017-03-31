@@ -26,6 +26,8 @@ public class DistanceAI implements AI {
 			typeToLookFor = Screen1.ROLL;
 			whereToGo = Constants.OWNBATTLE;
 		} else if (Screen1.getCardType(compBattle) == Screen1.ROLL) {
+			if (compSpeed == CardName.SPEED_LIMIT)
+				ttlfExtra = CardName.MILE_50;
 			typeToLookFor = Screen1.DISTANCE;
 			whereToGo = Constants.OWNDIST;
 		} else { //no cards on battlepile
