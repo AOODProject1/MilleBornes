@@ -686,7 +686,7 @@ public class Screen1 {
 			case Constants.OPPOSEBATTLE:playerBattle.setCardName(toPlay.getName());break;
 			case Constants.OPPOSELIMIT:playerSpeed.setCardName(toPlay.getName());break;
 			case Constants.OWNBATTLE:compBattle.setCardName(toPlay.getName());break;
-			case Constants.OWNDIST:compMileage.setCardName(toPlay.getName());break;
+			case Constants.OWNDIST:compMileage.setCardName(toPlay.getName());checkCompMileage();break;
 			case Constants.OWNLIMIT:compSpeed.setCardName(toPlay.getName());break;
 			case Constants.OWNSAFETY:
 				switch (toPlay.getName()) {
@@ -701,6 +701,19 @@ public class Screen1 {
 			case Constants.DISCARD:discardLabel.setCardName(toPlay.getName());
 				default:
 			}
+			//get rid of toPlay
+			compCardToReplace = compPlay[0];
+			comp[compPlay[0]] = null;
+			//replace player's missing card (begin player turn)
+			for (CardLabel x : playerCardGraphics) {
+				if (x.getCardName() == CardName.DEFAULT) {
+					x.setCardName(deckLabel.getTopCard().getName());
+				}
+			}
+			return result;
+		}
+		private static void checkCompMileage() {
+
 			//comp win statement
 			try{
 			if (compDistance + new MovementCard(compMileage.getCardName()).getDistance() <= 1000){
@@ -721,16 +734,6 @@ public class Screen1 {
 			}catch(ClassCastException e){
 				
 			}
-			//get rid of toPlay
-			compCardToReplace = compPlay[0];
-			comp[compPlay[0]] = null;
-			//replace player's missing card (begin player turn)
-			for (CardLabel x : playerCardGraphics) {
-				if (x.getCardName() == CardName.DEFAULT) {
-					x.setCardName(deckLabel.getTopCard().getName());
-				}
-			}
-			return result;
 		}
 	}
 	private static int compCardToReplace = -1;
