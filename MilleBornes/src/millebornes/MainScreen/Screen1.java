@@ -313,6 +313,10 @@ public class Screen1 {
 			public void keyPressed(KeyEvent e) {
 				if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_N)
 					init();
+				else if (e.isControlDown() && e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_D) {
+					player[0] = new MovementCard(CardName.MILE_25);
+					playerCardGraphics[0].setCardName(CardName.MILE_25);
+				}
 			}
 		});
 		f.add(compPaneSafeties);
