@@ -254,6 +254,8 @@ public class Screen1 {
 						p.writeObject(hazardComp);
 						p.writeObject(limitComp);
 						p.writeObject(mileageComp);
+						p.writeObject(playerDistance);
+						p.writeObject(compDistance);
 						
 					} catch (IOException e1) {
 						e1.printStackTrace();
@@ -283,15 +285,8 @@ public class Screen1 {
 						hazardComp = ((Card)(p.readObject()));
 						limitComp = ((SpeedCard)(p.readObject()));
 						mileageComp = ((Card)(p.readObject()));
-						for (int i = 0; i < playerCardGraphics.length; i++){
-							playerCardGraphics[i].setCardName(player[i].getName());
-							playerCardGraphics[i].revalidate();
-							playerCardGraphics[i].repaint();
-						}
-						playerBattle.setCardName(hazardPlayer.getName());
-						playerSpeed.setCardName(limitPlayer.getName());
-						playerMileage.setCardName(mileagePlayer.getName());
-						compBattle.setCardName(hazardComp.getName());
+						playerDistance = ((Integer)p.readObject());
+						compDistance = ((Integer)p.readObject());
 						
 						//playerCards.revalidate();
 						//playerCards.repaint();
@@ -300,6 +295,21 @@ public class Screen1 {
 					} catch (ClassNotFoundException e1) {
 						e1.printStackTrace();
 					}
+					for (int i = 0; i < playerCardGraphics.length; i++){
+						playerCardGraphics[i].setCardName(player[i].getName());
+						playerCardGraphics[i].revalidate();
+						playerCardGraphics[i].repaint();
+					}
+					playerBattle.setCardName(hazardPlayer.getName());
+					playerSpeed.setCardName(limitPlayer.getName());
+					playerMileage.setCardName(mileagePlayer.getName());
+					compBattle.setCardName(hazardComp.getName());
+					compSpeed.setCardName(limitComp.getName());
+					compMileage.setCardName(mileageComp.getName());
+					playerTotalDistance.setForeground(Color.WHITE);
+					compTotalDistance.setForeground(Color.WHITE);
+					playerTotalDistance.setText(playerDistance + " Miles");
+					compTotalDistance.setText(compDistance + " Miles");
 				}
 			}
 		});
@@ -590,7 +600,8 @@ public class Screen1 {
 			} else if (onto == playerMileage) { //Playing on own distance
 				if (playerDistance + new MovementCard(selectedCard).getDistance() > 1000)
 					return false;
-				if (getCardType(selectedCard) == DISTANCE && hazardPlayer.getName() == CardName.ROLL) {
+				if (getCardType(selectedCard) == DISTANCE && (hazardPlayer.getName() == CardName.ROLL ||
+						((hazardPlayer.getName() == CardName.STOP || getCardType(hazardPlayer.getName()) == REMEDY) && playerSafety1.getCardName() == CardName.RIGHT_OF_WAY))) {
 					if (limitPlayer.getName() == CardName.SPEED_LIMIT) {
 						if (selectedCard == CardName.MILE_25 || selectedCard == CardName.MILE_50) {
 							sT = "";
