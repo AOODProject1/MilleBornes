@@ -65,6 +65,7 @@ public class DistanceAI implements AI {
 				for (int i=0;i<hand.length;i++) {
 					if (hand[i].getName() == CardName.MILE_25 || hand[i].getName() == CardName.MILE_50){//hand[i].getClass().getSimpleName().equals(typeToLookFor.getClass().getSimpleName())) {
 						bestIndex=i;
+						whereToGo = Constants.OWNDIST;
 						break;
 					}
 				}
