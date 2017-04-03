@@ -373,6 +373,9 @@ public class Screen1 {
 		limitComp = new DefaultSpeedCard();
 		mileageComp = new DefaultCard();
 		compDistance = 0;
+		winText.setText("");
+		playerTotalDistance.setText("");
+		compTotalDistance.setText("");
 		deck = new ArrayList<>();
 		discard = new ArrayList<>();
 		for (int i = 0; i < 110; i++){
@@ -686,7 +689,9 @@ public class Screen1 {
 			case Constants.OPPOSEBATTLE:playerBattle.setCardName(toPlay.getName());break;
 			case Constants.OPPOSELIMIT:playerSpeed.setCardName(toPlay.getName());break;
 			case Constants.OWNBATTLE:compBattle.setCardName(toPlay.getName());break;
-			case Constants.OWNDIST:compMileage.setCardName(toPlay.getName());checkCompMileage();break;
+			case Constants.OWNDIST:compMileage.setCardName(toPlay.getName());
+				checkCompMileage();
+				break;
 			case Constants.OWNLIMIT:compSpeed.setCardName(toPlay.getName());break;
 			case Constants.OWNSAFETY:
 				switch (toPlay.getName()) {
@@ -718,14 +723,10 @@ public class Screen1 {
 			try{
 			if (compDistance + new MovementCard(compMileage.getCardName()).getDistance() <= 1000){
 				compDistance += new MovementCard(compMileage.getCardName()).getDistance();
-				if (compDistance != 1000){
-					cTD = compDistance + "Miles";
-					compTotalDistance.setForeground(Color.white);
-					compTotalDistance.setText(cTD);
-				} else if (compDistance == 1000){
-					cTD = compDistance + "Miles";
-					compTotalDistance.setForeground(Color.white);
-					compTotalDistance.setText(cTD);
+				cTD = compDistance + "Miles";
+				compTotalDistance.setForeground(Color.white);
+				compTotalDistance.setText(cTD);
+				if (compDistance == 1000){
 					wT = "Computer has won!";
 					winText.setForeground(Color.white);
 					winText.setText(wT);
