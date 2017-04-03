@@ -47,6 +47,7 @@ import millebornes.card.SafetyCard;
 import millebornes.card.SpeedCard;
 import millebornes.util.CardName;
 import millebornes.util.Constants;
+import millebornes.util.Countercard;
 import millebornes.util.ImageGrab;
 
 public class Screen1 {
@@ -444,6 +445,20 @@ public class Screen1 {
 		compCards.repaint();
 	}
 	/**
+	 * Checks if the computer has played a safety
+	 * @param selectedCard the safety card to check
+	 * @return wheter the card has been played by the computer
+	 */
+	private static boolean safetyPlayedComp(CardName selectedCard) {
+		switch (selectedCard) {
+		case RIGHT_OF_WAY: return compSafety1.getCardName()==CardName.RIGHT_OF_WAY;
+		case DRIVING_ACE: return compSafety2.getCardName()==CardName.DRIVING_ACE;
+		case EXTRA_TANK: return compSafety3.getCardName()==CardName.EXTRA_TANK;
+		case PUNCTURE_PROOF: return compSafety4.getCardName()==CardName.PUNCTURE_PROOF;
+		}
+		return false;
+	}
+	/**
 	 * This class allows the cards to be dragged and dropped on other cards. To implement, make an instance of this class
 	 * the TransferHandler of a CardLabel. Then, enable DnD through a MouseAdapter connected to each CardLabel
 	 * whose TransferHandler is this by calling exportAsDrag
@@ -475,7 +490,7 @@ public class Screen1 {
 					&& source.getParent() == null) //Not an actual cardLabel
 				return true;*/
 			if (onto == playerBattle) { //Playing onto player's battle pile
-				if (getCardType(selectedCard) == REMEDY && getCardType(underCard)==HAZARD) { //Countering Hazard
+				if (getCardType(selectedCard) == REMEDY && getCardType(underCard)==HAZARD && new Countercard(new HazardCard(underCard)).getRemedy().getName() == selectedCard) { //Countering Hazard
 					sT = "";
 					systemText.setText(sT);
 					return true;
@@ -514,6 +529,11 @@ public class Screen1 {
 				}
 				
 				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == ROLL) {
+					if (safetyPlayedComp(selectedCard)) {
+						sT = "Computer has played corresponding safety";
+						systemText.setText(sT);
+						return false;
+					}
 					sT = "";
 					systemText.setText(sT);
 					return true;
@@ -561,6 +581,8 @@ public class Screen1 {
 					return true;
 				}
 			} else if (onto == playerMileage) { //Playing on own distance
+				if (playerDistance + new MovementCard(selectedCard).getDistance() > 1000)
+					return false;
 				if (getCardType(selectedCard) == DISTANCE && hazardPlayer.getName() == CardName.ROLL) {
 					if (limitPlayer.getName() == CardName.SPEED_LIMIT) {
 						if (selectedCard == CardName.MILE_25 || selectedCard == CardName.MILE_50) {
