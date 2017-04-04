@@ -366,6 +366,7 @@ public class Screen1 {
 		compSafety2.setCardName(CardName.DEFAULT);
 		compSafety3.setCardName(CardName.DEFAULT);
 		compSafety4.setCardName(CardName.DEFAULT);
+		discardLabel.setCardName(CardName.DEFAULT);
 		player = new Card[7];
 		comp = new Card[7];
 		playerSafeties = new SafetyCard[4];
@@ -461,6 +462,9 @@ public class Screen1 {
 		playerCards.repaint();
 		compCards.revalidate();
 		compCards.repaint();
+		if (Math.random() > .5) {
+			doCompTurn();
+		}
 	}
 	/**
 	 * Checks if the computer has played a safety
@@ -468,7 +472,6 @@ public class Screen1 {
 	 * @return whether the card has been played by the computer
 	 */
 	private static boolean safetyPlayedComp(CardName selectedCard) {
-		System.out.println(selectedCard);
 		switch (selectedCard) {
 		case STOP: return compSafety1.getCardName()==CardName.RIGHT_OF_WAY;
 		case ACCIDENT: return compSafety2.getCardName()==CardName.DRIVING_ACE;
@@ -717,34 +720,7 @@ public class Screen1 {
 				}
 			}
 			*/
-			if (compCardToReplace != -1) 
-				comp[compCardToReplace] = deckLabel.getTopCard();
-			int[] compPlay = compPlayer.getBestCard(comp, compBattle.getCardName(), compSafeties, compDistance, limitComp.getName(), hazardPlayer.getName(), playerSafeties, playerDistance, limitPlayer.getName());
-			Card toPlay = comp[compPlay[0]];
-			switch (compPlay[1]) {
-			case Constants.OPPOSEBATTLE:playerBattle.setCardName(toPlay.getName());break;
-			case Constants.OPPOSELIMIT:playerSpeed.setCardName(toPlay.getName());break;
-			case Constants.OWNBATTLE:compBattle.setCardName(toPlay.getName());break;
-			case Constants.OWNDIST:compMileage.setCardName(toPlay.getName());
-				checkCompMileage();
-				break;
-			case Constants.OWNLIMIT:compSpeed.setCardName(toPlay.getName());break;
-			case Constants.OWNSAFETY:
-				switch (toPlay.getName()) {
-				case RIGHT_OF_WAY:compSafety1.setCardName(CardName.RIGHT_OF_WAY);compSafeties[0] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
-				case DRIVING_ACE:compSafety2.setCardName(CardName.DRIVING_ACE);compSafeties[1] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
-				case EXTRA_TANK:compSafety3.setCardName(CardName.EXTRA_TANK);compSafeties[2] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
-				case PUNCTURE_PROOF:compSafety4.setCardName(CardName.PUNCTURE_PROOF);compSafeties[3] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
-
-				default:
-					break;
-				}break;
-			case Constants.DISCARD:discardLabel.setCardName(toPlay.getName());
-				default:
-			}
-			//get rid of toPlay
-			compCardToReplace = compPlay[0];
-			comp[compPlay[0]] = null;
+			doCompTurn();
 			//replace player's missing card (begin player turn)
 			for (CardLabel x : playerCardGraphics) {
 				if (x.getCardName() == CardName.DEFAULT) {
@@ -753,24 +729,55 @@ public class Screen1 {
 			}
 			return result;
 		}
-		private static void checkCompMileage() {
+	}
+	private static void doCompTurn() {
 
-			//comp win statement
-			try{
-			if (compDistance + new MovementCard(compMileage.getCardName()).getDistance() <= 1000){
-				compDistance += new MovementCard(compMileage.getCardName()).getDistance();
-				cTD = compDistance + "Miles";
-				compTotalDistance.setForeground(Color.white);
-				compTotalDistance.setText(cTD);
-				if (compDistance == 1000 || (compDistance >= 900 && playerDistance == 0)){
-					wT = "Computer has won!";
-					winText.setForeground(Color.white);
-					winText.setText(wT);
-				}
+		if (compCardToReplace != -1) 
+			comp[compCardToReplace] = deckLabel.getTopCard();
+		int[] compPlay = compPlayer.getBestCard(comp, compBattle.getCardName(), compSafeties, compDistance, limitComp.getName(), hazardPlayer.getName(), playerSafeties, playerDistance, limitPlayer.getName());
+		Card toPlay = comp[compPlay[0]];
+		switch (compPlay[1]) {
+		case Constants.OPPOSEBATTLE:playerBattle.setCardName(toPlay.getName());break;
+		case Constants.OPPOSELIMIT:playerSpeed.setCardName(toPlay.getName());break;
+		case Constants.OWNBATTLE:compBattle.setCardName(toPlay.getName());break;
+		case Constants.OWNDIST:compMileage.setCardName(toPlay.getName());
+			checkCompMileage();
+			break;
+		case Constants.OWNLIMIT:compSpeed.setCardName(toPlay.getName());break;
+		case Constants.OWNSAFETY:
+			switch (toPlay.getName()) {
+			case RIGHT_OF_WAY:compSafety1.setCardName(CardName.RIGHT_OF_WAY);compSafeties[0] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
+			case DRIVING_ACE:compSafety2.setCardName(CardName.DRIVING_ACE);compSafeties[1] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
+			case EXTRA_TANK:compSafety3.setCardName(CardName.EXTRA_TANK);compSafeties[2] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
+			case PUNCTURE_PROOF:compSafety4.setCardName(CardName.PUNCTURE_PROOF);compSafeties[3] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
+
+			default:
+				break;
+			}break;
+		case Constants.DISCARD:discardLabel.setCardName(toPlay.getName());
+			default:
+		}
+		//get rid of toPlay
+		compCardToReplace = compPlay[0];
+		comp[compPlay[0]] = null;
+	}
+	private static void checkCompMileage() {
+
+		//comp win statement
+		try{
+		if (compDistance + new MovementCard(compMileage.getCardName()).getDistance() <= 1000){
+			compDistance += new MovementCard(compMileage.getCardName()).getDistance();
+			cTD = compDistance + "Miles";
+			compTotalDistance.setForeground(Color.white);
+			compTotalDistance.setText(cTD);
+			if (compDistance == 1000 || (compDistance >= 900 && playerDistance == 0)){
+				wT = "Computer has won!";
+				winText.setForeground(Color.white);
+				winText.setText(wT);
 			}
-			}catch(ClassCastException e){
-				
-			}
+		}
+		}catch(ClassCastException e){
+			
 		}
 	}
 	private static int compCardToReplace = -1;
