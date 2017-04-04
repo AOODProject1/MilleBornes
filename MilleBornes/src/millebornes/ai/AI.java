@@ -2,7 +2,6 @@ package millebornes.ai;
 
 import millebornes.card.Card;
 import millebornes.card.SafetyCard;
-import millebornes.card.SpeedCard;
 import millebornes.util.CardName;
 
 public interface AI {
