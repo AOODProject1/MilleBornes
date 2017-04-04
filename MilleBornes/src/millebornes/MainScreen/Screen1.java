@@ -689,18 +689,14 @@ public class Screen1 {
 				mileagePlayer = Card.getCardFromName(c);
 				if (playerDistance + ((MovementCard)mileagePlayer).getDistance() <= 1000){
 					playerDistance += ((MovementCard)mileagePlayer).getDistance();
-					if (playerDistance != 1000){
-						pTD = playerDistance + "Miles";
-						playerTotalDistance.setForeground(Color.white);
-						playerTotalDistance.setText(pTD);
-					} else if (playerDistance == 1000){
-						pTD = playerDistance + "Miles";
-						playerTotalDistance.setForeground(Color.white);
-						playerTotalDistance.setText(pTD);
+					pTD = playerDistance + "Miles";
+					playerTotalDistance.setForeground(Color.white);
+					playerTotalDistance.setText(pTD);
+					if (playerDistance == 1000){
 						wT = "Player has won!";
 						winText.setForeground(Color.white);
 						winText.setText(wT);
-						}
+					}
 				}
 			} else if (dest == compBattle) {
 				compBattle.setCardName(c);
