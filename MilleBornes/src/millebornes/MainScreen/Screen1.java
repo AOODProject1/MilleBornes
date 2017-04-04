@@ -692,7 +692,7 @@ public class Screen1 {
 					pTD = playerDistance + "Miles";
 					playerTotalDistance.setForeground(Color.white);
 					playerTotalDistance.setText(pTD);
-					if (playerDistance == 1000){
+					if (playerDistance == 1000 || (playerDistance >= 900 && compDistance == 0)){
 						wT = "Player has won!";
 						winText.setForeground(Color.white);
 						winText.setText(wT);
@@ -762,7 +762,7 @@ public class Screen1 {
 				cTD = compDistance + "Miles";
 				compTotalDistance.setForeground(Color.white);
 				compTotalDistance.setText(cTD);
-				if (compDistance == 1000){
+				if (compDistance == 1000 || (compDistance >= 900 && playerDistance == 0)){
 					wT = "Computer has won!";
 					winText.setForeground(Color.white);
 					winText.setText(wT);
