@@ -18,16 +18,32 @@ public class DistanceAI implements AI {
 		int typeToLookFor = -1;
 		CardName ttlfExtra = CardName.DEFAULT;
 		int whereToGo=0;
+		for (int i=0;i<hand.length;i++) {
+			if (Screen1.getCardType(hand[i].getName()) == Screen1.SAFETY) {
+				return new int[] {i,Constants.OWNSAFETY};
+			}
+		}
 		if (Screen1.getCardType(compBattle) == Screen1.HAZARD) {
 			typeToLookFor = Screen1.REMEDY;
 			ttlfExtra = new Countercard(new HazardCard(compBattle)).getRemedy().getName(); 
 			whereToGo = Constants.OWNBATTLE;
+		} else if (Screen1.getCardType(compBattle) == Screen1.STOP) {
+			if (compSafeties[0]==null) {
+
+				typeToLookFor = Screen1.ROLL;
+				whereToGo = Constants.OWNBATTLE;
+			} else if (compSafeties[0].getName() == CardName.RIGHT_OF_WAY) {
+				if (compSpeed == CardName.SPEED_LIMIT)
+					ttlfExtra = CardName.MILE_25;
+				typeToLookFor = Screen1.DISTANCE;
+				whereToGo = Constants.OWNDIST;
+			}
 		} else if (Screen1.getCardType(compBattle) == Screen1.REMEDY) {
 			typeToLookFor = Screen1.ROLL;
 			whereToGo = Constants.OWNBATTLE;
 		} else if (Screen1.getCardType(compBattle) == Screen1.ROLL) {
 			if (compSpeed == CardName.SPEED_LIMIT)
-				ttlfExtra = CardName.MILE_50;
+				ttlfExtra = CardName.MILE_25;
 			typeToLookFor = Screen1.DISTANCE;
 			whereToGo = Constants.OWNDIST;
 		} else { //no cards on battlepile
@@ -61,7 +77,7 @@ public class DistanceAI implements AI {
 					break;
 				}
 			}
-			if (bestIndex==-1) {
+			if (bestIndex==-1 && canPlayDistance(compBattle,compSafeties[0]!=null)) {
 				for (int i=0;i<hand.length;i++) {
 					if (hand[i].getName() == CardName.MILE_25 || hand[i].getName() == CardName.MILE_50){//hand[i].getClass().getSimpleName().equals(typeToLookFor.getClass().getSimpleName())) {
 						bestIndex=i;
@@ -83,6 +99,9 @@ public class DistanceAI implements AI {
 			return new int[] {0,Constants.DISCARD};
 		}
 		return new int[] {bestIndex,whereToGo};
+	}
+	private static boolean canPlayDistance(CardName hazardPile, boolean row) {
+		return hazardPile==CardName.ROLL || (row && !(Screen1.getCardType(hazardPile)==Screen1.HAZARD));
 	}
 	
 }

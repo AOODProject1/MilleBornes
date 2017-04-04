@@ -464,14 +464,15 @@ public class Screen1 {
 	/**
 	 * Checks if the computer has played a safety
 	 * @param selectedCard the safety card to check
-	 * @return wheter the card has been played by the computer
+	 * @return whether the card has been played by the computer
 	 */
 	private static boolean safetyPlayedComp(CardName selectedCard) {
+		System.out.println(selectedCard);
 		switch (selectedCard) {
-		case RIGHT_OF_WAY: return compSafety1.getCardName()==CardName.RIGHT_OF_WAY;
-		case DRIVING_ACE: return compSafety2.getCardName()==CardName.DRIVING_ACE;
-		case EXTRA_TANK: return compSafety3.getCardName()==CardName.EXTRA_TANK;
-		case PUNCTURE_PROOF: return compSafety4.getCardName()==CardName.PUNCTURE_PROOF;
+		case STOP: return compSafety1.getCardName()==CardName.RIGHT_OF_WAY;
+		case ACCIDENT: return compSafety2.getCardName()==CardName.DRIVING_ACE;
+		case OUT_OF_GAS: return compSafety3.getCardName()==CardName.EXTRA_TANK;
+		case FLAT_TIRE: return compSafety4.getCardName()==CardName.PUNCTURE_PROOF;
 		}
 		return false;
 	}
@@ -556,11 +557,21 @@ public class Screen1 {
 					return true;
 				}
 				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == REMEDY) {
+					if (safetyPlayedComp(selectedCard)) {
+						sT = "Computer has played corresponding safety";
+						systemText.setText(sT);
+						return false;
+					}
 					sT = "";
 					systemText.setText(sT);
 					return true;
 				}
 				if (getCardType(selectedCard) == HAZARD && getCardType(underCard) == BLANK) {
+					if (safetyPlayedComp(selectedCard)) {
+						sT = "Computer has played corresponding safety";
+						systemText.setText(sT);
+						return false;
+					}
 					sT = "";
 					systemText.setText(sT);
 					return true;
@@ -706,10 +717,10 @@ public class Screen1 {
 			case Constants.OWNLIMIT:compSpeed.setCardName(toPlay.getName());break;
 			case Constants.OWNSAFETY:
 				switch (toPlay.getName()) {
-				case RIGHT_OF_WAY:compSafety1.setCardName(CardName.RIGHT_OF_WAY);break;
-				case DRIVING_ACE:compSafety2.setCardName(CardName.DRIVING_ACE);break;
-				case EXTRA_TANK:compSafety3.setCardName(CardName.EXTRA_TANK);break;
-				case PUNCTURE_PROOF:compSafety4.setCardName(CardName.PUNCTURE_PROOF);break;
+				case RIGHT_OF_WAY:compSafety1.setCardName(CardName.RIGHT_OF_WAY);compSafeties[0] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
+				case DRIVING_ACE:compSafety2.setCardName(CardName.DRIVING_ACE);compSafeties[1] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
+				case EXTRA_TANK:compSafety3.setCardName(CardName.EXTRA_TANK);compSafeties[2] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
+				case PUNCTURE_PROOF:compSafety4.setCardName(CardName.PUNCTURE_PROOF);compSafeties[3] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
 
 				default:
 					break;
