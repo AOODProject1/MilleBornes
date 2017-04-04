@@ -578,16 +578,31 @@ public class Screen1 {
 					return true;
 				}
 				if (getCardType(selectedCard) == STOP && getCardType(underCard) == ROLL) {
+					if (safetyPlayedComp(selectedCard)) {
+						sT = "Computer has played corresponding safety";
+						systemText.setText(sT);
+						return false;
+					}
 					sT = "";
 					systemText.setText(sT);
 					return true;
 				}
 				if (getCardType(selectedCard) == STOP && getCardType(underCard) == REMEDY) {
+					if (safetyPlayedComp(selectedCard)) {
+						sT = "Computer has played corresponding safety";
+						systemText.setText(sT);
+						return false;
+					}
 					sT = "";
 					systemText.setText(sT);
 					return true;
 				}
 				if (getCardType(selectedCard) == STOP && getCardType(underCard) == BLANK) {
+					if (safetyPlayedComp(selectedCard)) {
+						sT = "Computer has played corresponding safety";
+						systemText.setText(sT);
+						return false;
+					}
 					sT = "";
 					systemText.setText(sT);
 					return true;
@@ -649,6 +664,8 @@ public class Screen1 {
 					return true;
 				return false;
 			} else if (onto == discardLabel) {
+				sT = "";
+				systemText.setText(sT);
 				return true;
 			}
 			//enter conditions based on getCardType and where source is
