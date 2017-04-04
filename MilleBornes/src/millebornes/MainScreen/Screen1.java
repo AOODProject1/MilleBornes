@@ -118,7 +118,7 @@ public class Screen1 {
 		JMenuItem newGame = new JMenuItem("New Game");
 		JPanel playerPaneSafeties = new JPanel();//large panel with all the player safety cards
 		JPanel compPaneSafeties = new JPanel();//large panel with all the comp safety cards
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //Native is 1366 by 768
 		playerPaneSafeties.setBounds((int)screenSize.getWidth() - 100, 0, 100, 1136);
 		compPaneSafeties.setBounds(0, 0, 100, 1136);
 		systemText = new JLabel();
