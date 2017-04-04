@@ -2,6 +2,7 @@ package millebornes.MainScreen;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -109,7 +110,7 @@ public class Screen1 {
 	public static void show(String p){
 		f = new JFrame("Mille Bornes");
 		ImageGrab.loadCards();
-		f.setExtendedState(f.MAXIMIZED_BOTH);
+		f.setExtendedState(Frame.MAXIMIZED_BOTH);
 		JMenuBar bar = new JMenuBar();
 		JMenuItem help = new JMenuItem("Help");
 		JMenuItem load = new JMenuItem("Load");
