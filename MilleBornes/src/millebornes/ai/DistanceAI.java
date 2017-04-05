@@ -23,7 +23,10 @@ public class DistanceAI implements AI {
 				return new int[] {i,Constants.OWNSAFETY};
 			}
 		}
-		if (Screen1.getCardType(compBattle) == Screen1.HAZARD) {
+		if (Screen1.getCardType(compBattle) == Screen1.BLANK) {
+			typeToLookFor = Screen1.ROLL;
+			whereToGo = Constants.OWNBATTLE;
+		} else if (Screen1.getCardType(compBattle) == Screen1.HAZARD) {
 			typeToLookFor = Screen1.REMEDY;
 			ttlfExtra = new Countercard(new HazardCard(compBattle)).getRemedy().getName(); 
 			whereToGo = Constants.OWNBATTLE;
