@@ -651,20 +651,24 @@ public class Screen1 {
 				systemText.setText(sT);
 				return false;
 			} else if (onto == playerSafety1) {
-				if (selectedCard == CardName.RIGHT_OF_WAY)
+				if (selectedCard == CardName.RIGHT_OF_WAY) {
 					return true;
+				}
 				return false;
 			} else if (onto == playerSafety2) {
-				if (selectedCard == CardName.DRIVING_ACE)
+				if (selectedCard == CardName.DRIVING_ACE){
 					return true;
+				}
 				return false;
 			} else if (onto == playerSafety3) {
-				if (selectedCard == CardName.EXTRA_TANK)
+				if (selectedCard == CardName.EXTRA_TANK){
 					return true;
+				}
 				return false;
 			} else if (onto == playerSafety4) {
-				if (selectedCard == CardName.PUNCTURE_PROOF)
+				if (selectedCard == CardName.PUNCTURE_PROOF){
 					return true;
+				}
 				return false;
 			} else if (onto == discardLabel) {
 				sT = "";
@@ -690,8 +694,7 @@ public class Screen1 {
 			} else if (dest == playerMileage) {
 				playerMileage.setCardName(c);
 				mileagePlayer = Card.getCardFromName(c);
-				if (playerDistance + ((MovementCard)mileagePlayer).getDistance() <= 1000){
-					playerDistance += ((MovementCard)mileagePlayer).getDistance();
+				if (addScorePlayer(((MovementCard)mileagePlayer).getDistance())){
 					pTD = playerDistance + "Miles";
 					playerTotalDistance.setForeground(Color.white);
 					playerTotalDistance.setText(pTD);
@@ -713,6 +716,18 @@ public class Screen1 {
 				mileageComp = Card.getCardFromName(c);
 			} else if (dest == discardLabel) {
 				discardLabel.setCardName(c);
+			} else if (dest == playerSafety1) {
+				addScorePlayer(100);
+				playerSafeties[0] = new SafetyCard(CardName.RIGHT_OF_WAY);
+			} else if (dest == playerSafety2) {
+				addScorePlayer(100);
+				playerSafeties[1] = new SafetyCard(CardName.DRIVING_ACE);
+			} else if (dest == playerSafety3) {
+				addScorePlayer(100);
+				playerSafeties[2] = new SafetyCard(CardName.EXTRA_TANK);
+			} else if (dest == playerSafety4) {
+				addScorePlayer(100);
+				playerSafeties[3] = new SafetyCard(CardName.PUNCTURE_PROOF);
 			}
 			/*for (int i = 0; i < player.length; i++){
 				if (player[i].getCardType(player[i]) == HAZARD){
@@ -746,10 +761,22 @@ public class Screen1 {
 		case Constants.OWNLIMIT:compSpeed.setCardName(toPlay.getName());break;
 		case Constants.OWNSAFETY:
 			switch (toPlay.getName()) {
-			case RIGHT_OF_WAY:compSafety1.setCardName(CardName.RIGHT_OF_WAY);compSafeties[0] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
-			case DRIVING_ACE:compSafety2.setCardName(CardName.DRIVING_ACE);compSafeties[1] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
-			case EXTRA_TANK:compSafety3.setCardName(CardName.EXTRA_TANK);compSafeties[2] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
-			case PUNCTURE_PROOF:compSafety4.setCardName(CardName.PUNCTURE_PROOF);compSafeties[3] = new SafetyCard(CardName.RIGHT_OF_WAY);break;
+			case RIGHT_OF_WAY:compSafety1.setCardName(CardName.RIGHT_OF_WAY);
+				compSafeties[0] = new SafetyCard(CardName.RIGHT_OF_WAY);
+				addScoreComp(100);
+				break;
+			case DRIVING_ACE:compSafety2.setCardName(CardName.DRIVING_ACE);
+				compSafeties[1] = new SafetyCard(CardName.RIGHT_OF_WAY);
+				addScoreComp(100);
+				break;
+			case EXTRA_TANK:compSafety3.setCardName(CardName.EXTRA_TANK);
+				compSafeties[2] = new SafetyCard(CardName.RIGHT_OF_WAY);
+				addScoreComp(100);
+				break;
+			case PUNCTURE_PROOF:compSafety4.setCardName(CardName.PUNCTURE_PROOF);
+				compSafeties[3] = new SafetyCard(CardName.RIGHT_OF_WAY);
+				addScoreComp(100);
+			break;
 
 			default:
 				break;
@@ -765,11 +792,7 @@ public class Screen1 {
 
 		//comp win statement
 		try{
-		if (compDistance + new MovementCard(compMileage.getCardName()).getDistance() <= 1000){
-			compDistance += new MovementCard(compMileage.getCardName()).getDistance();
-			cTD = compDistance + "Miles";
-			compTotalDistance.setForeground(Color.white);
-			compTotalDistance.setText(cTD);
+		if (addScoreComp(new MovementCard(compMileage.getCardName()).getDistance())){
 			if (compDistance == 1000 || (compDistance >= 900 && playerDistance == 0)){
 				wT = "Computer has won!";
 				winText.setForeground(Color.white);
@@ -825,6 +848,26 @@ public class Screen1 {
 		default:
 			return -1;
 		}
+	}
+	public static boolean addScorePlayer(int score) {
+		if (playerDistance + score <= 1000) {
+			playerDistance+=score;
+			pTD = playerDistance + "Miles";
+			playerTotalDistance.setForeground(Color.white);
+			playerTotalDistance.setText(pTD);
+			return true;
+		}
+		return false;
+	}
+	public static boolean addScoreComp(int score) {
+		if (compDistance + score <= 1000) {
+			compDistance+=score;
+			cTD = compDistance + "Miles";
+			compTotalDistance.setForeground(Color.white);
+			compTotalDistance.setText(cTD);
+			return true;
+		}
+		return false;
 	}
 	/*public String win(){
 		if (playerDistance == 1000){
