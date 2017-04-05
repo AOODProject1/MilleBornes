@@ -25,4 +25,7 @@ public class DeckLabel extends JLabel {
 	public void setDeck(ArrayList<Card> d) {
 		deck=d;
 	}
+	public int getDeckSize() {
+		return deck.size();
+	}
 }

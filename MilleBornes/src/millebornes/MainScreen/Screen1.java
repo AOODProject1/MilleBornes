@@ -324,9 +324,11 @@ public class Screen1 {
 			public void keyPressed(KeyEvent e) {
 				if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_N)
 					init();
-				else if (e.isControlDown() && e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_D) {
+				else if (e.isControlDown() && e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_1) {
 					player[0] = new MovementCard(CardName.MILE_25);
 					playerCardGraphics[0].setCardName(CardName.MILE_25);
+				} else if (e.isControlDown() && e.isShiftDown() && e.getKeyCode() == KeyEvent.VK_2) {
+					addScorePlayer(100);
 				}
 			}
 		});
@@ -681,6 +683,7 @@ public class Screen1 {
 		}
 		@Override
 		public boolean importData(TransferSupport support) {
+			boolean safetyPlayed=false;
 			CardLabel dest = (CardLabel)support.getComponent();
 			boolean result = super.importData(support);
 			CardName c = source.getCardName();
@@ -715,17 +718,26 @@ public class Screen1 {
 				compMileage.setCardName(c);
 				mileageComp = Card.getCardFromName(c);
 			} else if (dest == discardLabel) {
+				discard.add(Card.getCardFromName(c));
+				if (deckLabel.getDeckSize()==0) {
+					Collections.shuffle(discard);
+					deckLabel.setDeck(discard);
+				}
 				discardLabel.setCardName(c);
 			} else if (dest == playerSafety1) {
+				safetyPlayed=true;
 				addScorePlayer(100);
 				playerSafeties[0] = new SafetyCard(CardName.RIGHT_OF_WAY);
 			} else if (dest == playerSafety2) {
+				safetyPlayed=true;
 				addScorePlayer(100);
 				playerSafeties[1] = new SafetyCard(CardName.DRIVING_ACE);
 			} else if (dest == playerSafety3) {
+				safetyPlayed=true;
 				addScorePlayer(100);
 				playerSafeties[2] = new SafetyCard(CardName.EXTRA_TANK);
 			} else if (dest == playerSafety4) {
+				safetyPlayed=true;
 				addScorePlayer(100);
 				playerSafeties[3] = new SafetyCard(CardName.PUNCTURE_PROOF);
 			}
@@ -735,7 +747,8 @@ public class Screen1 {
 				}
 			}
 			*/
-			doCompTurn();
+			if (!safetyPlayed)
+				doCompTurn();
 			//replace player's missing card (begin player turn)
 			for (CardLabel x : playerCardGraphics) {
 				if (x.getCardName() == CardName.DEFAULT) {
@@ -751,6 +764,9 @@ public class Screen1 {
 			comp[compCardToReplace] = deckLabel.getTopCard();
 		int[] compPlay = compPlayer.getBestCard(comp, compBattle.getCardName(), compSafeties, compDistance, limitComp.getName(), hazardPlayer.getName(), playerSafeties, playerDistance, limitPlayer.getName());
 		Card toPlay = comp[compPlay[0]];
+		//get rid of card referenced by toPlay
+		compCardToReplace = compPlay[0];
+		comp[compPlay[0]] = null;
 		switch (compPlay[1]) {
 		case Constants.OPPOSEBATTLE:playerBattle.setCardName(toPlay.getName());break;
 		case Constants.OPPOSELIMIT:playerSpeed.setCardName(toPlay.getName());break;
@@ -780,13 +796,12 @@ public class Screen1 {
 
 			default:
 				break;
-			}break;
+			}
+			doCompTurn();
+			break;
 		case Constants.DISCARD:discardLabel.setCardName(toPlay.getName());
 			default:
 		}
-		//get rid of toPlay
-		compCardToReplace = compPlay[0];
-		comp[compPlay[0]] = null;
 	}
 	private static void checkCompMileage() {
 
