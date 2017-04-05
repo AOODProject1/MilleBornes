@@ -16,6 +16,9 @@ public abstract class Card implements Serializable {
 	public boolean equals(Card c) {
 		return c.name==name;
 	}
+	public String toString() {
+		return name.toString();
+	}
 	public static Card getCardFromName(CardName c) {
 		switch (c) {
 		case ACCIDENT:

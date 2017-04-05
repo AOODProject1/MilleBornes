@@ -225,6 +225,15 @@ public class Screen1 {
 		bar.add(help);
 		bar.add(quit);
 		quit.addActionListener(new QuitListener());
+		discardLabel.addMouseListener(new MouseAdapter() {
+			public void mouseReleased(MouseEvent e) {
+				System.out.println(e.getButton());
+				if (e.getButton() == MouseEvent.BUTTON3) {
+					System.out.println("W");
+					JOptionPane.showMessageDialog(f, discard);
+				}
+			}
+		});
 		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				init();
