@@ -528,12 +528,12 @@ public class Screen1 {
 					systemText.setText(sT);
 					return true;
 				}
-				if (getCardType(selectedCard) == ROLL && getCardType(underCard) == REMEDY) { //Playing Roll after a remedy
+				if ((getCardType(selectedCard) == ROLL || selectedCard == CardName.MILE_200) && getCardType(underCard) == REMEDY) { //Playing Roll after a remedy
 					sT = "";
 					systemText.setText(sT);
 					return true;
 				}
-				if (getCardType(selectedCard) == ROLL && getCardType(underCard) == BLANK) {
+				if ((getCardType(selectedCard) == ROLL || selectedCard == CardName.MILE_200) && getCardType(underCard) == BLANK) {
 					sT = "";
 					systemText.setText(sT);
 					return true;
@@ -698,8 +698,13 @@ public class Screen1 {
 			CardName c = source.getCardName();
 			source.setCardName(CardName.DEFAULT); //Removes card from hand
 			if (dest == playerBattle) {
-				playerBattle.setCardName(c);
-				hazardPlayer = Card.getCardFromName(c);
+				if (c == CardName.MILE_200) {
+					playerBattle.setCardName(CardName.ROLL);
+					hazardPlayer = Card.getCardFromName(CardName.ROLL);
+				} else {
+					playerBattle.setCardName(c);
+					hazardPlayer = Card.getCardFromName(c);
+				}
 			} else if (dest == playerSpeed) {
 				playerSpeed.setCardName(c);
 				limitPlayer = Card.getSpeedCardFromName(c);
