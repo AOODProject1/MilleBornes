@@ -1,11 +1,13 @@
 package millebornes.util;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 /**
  * Loads the images of cards and the back of the card, then returns the card when requested
@@ -24,18 +26,9 @@ public class ImageGrab {
 	 */
 	public static void loadCards() {
 		for (CardName c : CardName.values()){
-			try {
-				cards.put(c, ImageIO.read(new File("mbcards/"+c.toString()+".png")));
-			} catch (IOException e) {
-				System.err.println(c);
-				e.printStackTrace();
-			}
+			cards.put(c, new ImageIcon(ImageGrab.class.getResource("mbcards/"+c.toString()+".png")).getImage());
 		}
-		try {
-			cardBack = ImageIO.read(new File("mbcards/MilleBornesCardBack.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		cardBack = new ImageIcon(ImageGrab.class.getResource("mbcards/MilleBornesCardBack.png")).getImage();
 	}
 	/**
 	 * Gets the pre-loaded graphic for the card in question.<br>
